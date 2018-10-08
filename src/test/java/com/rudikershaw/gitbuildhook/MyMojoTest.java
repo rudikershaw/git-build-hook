@@ -5,50 +5,63 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.testing.MojoRule;
-import org.apache.maven.plugin.testing.WithoutMojo;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-public class MyMojoTest
-{
+public class MyMojoTest {
+
     @Rule
-    public MojoRule rule = new MojoRule()
-    {
+    public MojoRule rule = new MojoRule() {
         @Override
-        protected void before() throws Throwable
-        {
+        protected void before() throws Throwable {
+
         }
 
         @Override
-        protected void after()
-        {
+        protected void after() {
+
         }
     };
 
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
     /**
-     * @throws Exception if any
+     * Test the basic running of the plugin.
+     * @throws Exception if anything goes wrong.
      */
     @Test
-    public void testSomething() throws Exception
-    {
-        File pom = new File("target/test-classes/project-to-test/");
+    public void testDefaultSuccessfulRun() throws Exception {
+        final File pom = new File("target/test-classes/project-to-test/");
         assertNotNull(pom);
         assertTrue(pom.exists());
 
-        MyMojo myMojo = (MyMojo) rule.lookupConfiguredMojo(pom, "test");
+        final MyMojo myMojo = (MyMojo) rule.lookupConfiguredMojo(pom, "check");
         assertNotNull(myMojo);
         myMojo.execute();
     }
 
-    /** Do not need the MojoRule. */
-    @WithoutMojo
-    @Test
-    public void testSomethingWhichDoesNotNeedTheMojoAndProbablyShouldBeExtractedIntoANewClassOfItsOwn()
+    /**
+     * Tests that the plugin fails the build when the project is not managed by Git.
+     * @throws IOException if a temp project cannot be created for testing.
+     */
+    @Test(expected = MojoFailureException.class)
+    public void testFailureFromLackingGitRepo() throws Exception
     {
-        assertTrue(true);
-    }
+        Files.copy(Paths.get("target/test-classes/project-to-test/pom.xml"),
+                   Paths.get(folder.getRoot().getAbsolutePath() + "/pom.xml"));
 
+        assertTrue(folder.getRoot().exists());
+        final MyMojo myMojo = (MyMojo) rule.lookupConfiguredMojo(folder.getRoot(), "check");
+        assertNotNull(myMojo);
+        myMojo.execute();
+    }
 }
 
