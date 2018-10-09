@@ -9,7 +9,24 @@
   <packaging>maven-plugin</packaging>
 
   <name>Git Build Hook Maven Plugin</name>
+  <description>A plugin for installing local hooks and running basic git related validation during your Maven build.</description>
   <url>http://www.rudikershaw.com</url>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Rudi A. Kershaw</name>
+      <email>alexander_kershaw@hotmail.co.uk</email>
+      <organization>None</organization>
+      <organizationUrl>https://www.rudikershaw.com</organizationUrl>
+    </developer>
+  </developers>
 
   <prerequisites>
     <maven>${maven.version}</maven>
@@ -100,6 +117,30 @@
           <execution>
             <goals>
               <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
             </goals>
           </execution>
         </executions>
