@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-public class MyMojoTest {
+public class GitBuildHookMojoTest {
 
     @Rule
     public MojoRule rule = new MojoRule() {
@@ -43,9 +43,9 @@ public class MyMojoTest {
         assertNotNull(pom);
         assertTrue(pom.exists());
 
-        final MyMojo myMojo = (MyMojo) rule.lookupConfiguredMojo(pom, "check");
-        assertNotNull(myMojo);
-        myMojo.execute();
+        final GitBuildHookMojo gitBuildHookMojo = (GitBuildHookMojo) rule.lookupConfiguredMojo(pom, "check");
+        assertNotNull(gitBuildHookMojo);
+        gitBuildHookMojo.execute();
     }
 
     /**
@@ -59,9 +59,9 @@ public class MyMojoTest {
                    Paths.get(folder.getRoot().getAbsolutePath() + "/pom.xml"));
 
         assertTrue(folder.getRoot().exists());
-        final MyMojo myMojo = (MyMojo) rule.lookupConfiguredMojo(folder.getRoot(), "check");
-        assertNotNull(myMojo);
-        myMojo.execute();
+        final GitBuildHookMojo gitBuildHookMojo = (GitBuildHookMojo) rule.lookupConfiguredMojo(folder.getRoot(), "check");
+        assertNotNull(gitBuildHookMojo);
+        gitBuildHookMojo.execute();
     }
 }
 

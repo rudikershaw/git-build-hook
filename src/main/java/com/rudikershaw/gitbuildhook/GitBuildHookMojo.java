@@ -13,7 +13,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 /** Starting location for the Git Build Hook plugin and home of the execute method. */
 @Mojo(name = "check", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
-public class MyMojo extends AbstractMojo {
+public class GitBuildHookMojo extends AbstractMojo {
 
     /** Injected MavenProject containing project related information such as base directory. */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
