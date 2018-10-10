@@ -28,7 +28,7 @@ public class GitBuildHookMojo extends AbstractMojo {
     public void execute() throws MojoFailureException {
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder().findGitDir(project.getBasedir());
         if (repoBuilder.getGitDir() != null) {
-            try (final Git git = Git.open(repoBuilder.getGitDir())) {
+            try (Git git = Git.open(repoBuilder.getGitDir())) {
                 getLog().info("Found the local git repository.");
                 getLog().info("Current branch '" + git.getRepository().getBranch() + "'.");
             } catch (final IOException e) {
@@ -42,7 +42,7 @@ public class GitBuildHookMojo extends AbstractMojo {
     }
 
     /**
-     * Initialise a new git repository.
+     * Initialise a new git repository in the Maven project base directory.
      *
      * @throws MojoFailureException to fail the build and with details of the failure.
      */

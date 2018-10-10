@@ -28,14 +28,21 @@
     </developer>
   </developers>
 
+  <scm>
+    <connection>scm:git:git://github.com/rudikershaw/git-build-hook.git</connection>
+    <developerConnection>scm:git:ssh://github.com:rudikershaw/git-build-hook.git</developerConnection>
+    <url>http://github.com/rudikershaw/git-build-hook/tree/master</url>
+  </scm>
+
   <prerequisites>
     <maven>${maven.version}</maven>
   </prerequisites>
 
   <properties>
+    <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.version>3.5.2</maven.version>
   </properties>
 
@@ -116,6 +123,27 @@
         <executions>
           <execution>
             <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+          <includeTests>true</includeTests>
+          <minimumTokens>100</minimumTokens>
+          <targetJdk>${java.version}</targetJdk>
+          <failOnViolation>true</failOnViolation>
+          <verbose>true</verbose>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>pmd</goal>
+              <goal>cpd</goal>
+              <goal>cpd-check</goal>
               <goal>check</goal>
             </goals>
           </execution>
