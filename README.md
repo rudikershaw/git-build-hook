@@ -1,5 +1,5 @@
 # Git Build Hook Maven Plugin
-A Maven plugin used to install git hooks and in the local project and repository, with options to fail the build if no git repository was detected or to initialise a repo if one does not already exist. Without any configuration the default behavior is the fail the build if the project is not managed by a git repository.
+A Maven plugin used to install git hooks in the local project and repository, with options to fail the build if no git repository was detected or to initialise a repo if one does not already exist. Without any configuration the default behavior is the fail the build if the project is not managed by a git repository.
 
 ## Example Usage
 
