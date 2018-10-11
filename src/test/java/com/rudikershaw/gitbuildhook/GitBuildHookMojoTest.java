@@ -48,8 +48,7 @@ public class GitBuildHookMojoTest {
     @Test(expected = MojoFailureException.class)
     public void testFailureFromLackingGitRepo() throws Exception
     {
-        Files.copy(Paths.get("target/test-classes/default-test-project/pom.xml"),
-                   Paths.get(folder.getRoot().getAbsolutePath() + "/pom.xml"));
+        moveToTempTestDirectory("default-test-project", "pom.xml");
 
         assertTrue(folder.getRoot().exists());
         final GitBuildHookMojo gitBuildHookMojo = (GitBuildHookMojo) rule.lookupConfiguredMojo(folder.getRoot(), "check");
@@ -65,8 +64,7 @@ public class GitBuildHookMojoTest {
     @Test
     public void testInitialiseNewGitRepo() throws Exception
     {
-        Files.copy(Paths.get("target/test-classes/test-project-with-initialise-true/pom.xml"),
-                   Paths.get(folder.getRoot().getAbsolutePath() + "/pom.xml"));
+        moveToTempTestDirectory("test-project-with-initialise-true", "pom.xml");
 
         assertTrue(folder.getRoot().exists());
         final Verifier verifier = new Verifier(folder.getRoot().toString());
@@ -74,6 +72,45 @@ public class GitBuildHookMojoTest {
         verifier.verifyErrorFreeLog();
         verifier.assertFilePresent(".git");
         verifier.resetStreams();
+    }
+
+    /**
+     * Tests that a new repo is initialised if none exists and the initialise flag is configured.
+     *
+     * @throws IOException if a temp project cannot be created for testing.
+     */
+    @Test
+    public void testInstallTwoHooks() throws Exception
+    {
+        moveToTempTestDirectory("test-project-with-hooks", "pom.xml");
+        moveToTempTestDirectory("test-project-with-hooks", "hook-to-install.sh");
+
+        assertTrue(folder.getRoot().exists());
+        final Verifier verifier = new Verifier(folder.getRoot().toString());
+        verifier.executeGoal("install");
+        verifier.verifyErrorFreeLog();
+        verifier.assertFilePresent(".git/hooks/pre-commit");
+        verifier.assertFilePresent(".git/hooks/pre-push");
+        verifier.assertFilePresent(".git/hooks/pre-rebase");
+        verifier.assertFilePresent(".git/hooks/commit-msg");
+        verifier.assertFilePresent(".git/hooks/prepare-commit-msg");
+        verifier.assertFilePresent(".git/hooks/update");
+        verifier.assertFilePresent(".git/hooks/post-update");
+        verifier.assertFilePresent(".git/hooks/applypatch-msg");
+        verifier.assertFilePresent(".git/hooks/pre-applypatch");
+        verifier.resetStreams();
+    }
+
+    /**
+     * Move a file for a specified test folder into a temporary directory for testing.
+     *
+     * @param testName the name of the test directory in which the files are kept.
+     * @param fileName the name of the file to move into the temporary directory.
+     * @throws IOException if moving the file in question fails.
+     */
+    private void moveToTempTestDirectory(final String testName, final String fileName) throws IOException {
+        Files.copy(Paths.get("target/test-classes/" + testName + "/" + fileName),
+                Paths.get(folder.getRoot().getAbsolutePath() + "/" + fileName));
     }
 }
 
