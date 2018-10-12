@@ -3,8 +3,6 @@ A Maven plugin used to install git hooks and in the local project and repository
 
 ## Example Usage
 
-Please note, this plugin is in pre-release and so will not be available on Maven central. For the time being you will need to build the plugin locally, or install it on your own dependency repository.
-
 ```$xml
   <build>
     <plugins>
@@ -33,6 +31,7 @@ Please note, this plugin is in pre-release and so will not be available on Maven
           </execution>
         </executions>
       </plugin>
+        <!-- ... etc ... -->
     </plugins>
   </build>
 ```
