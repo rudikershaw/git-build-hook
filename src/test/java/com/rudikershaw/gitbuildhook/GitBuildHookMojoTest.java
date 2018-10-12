@@ -16,6 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+/** Unit and integration tests for the GitBuildHookMojo. */
 public class GitBuildHookMojoTest {
 
     @Rule
