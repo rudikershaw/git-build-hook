@@ -119,7 +119,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.6</version>
+        <version>3.1.7</version>
         <executions>
           <execution>
             <goals>
@@ -130,11 +130,13 @@
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.10.0</version>
         <configuration>
           <includeTests>true</includeTests>
           <minimumTokens>100</minimumTokens>
           <targetJdk>${java.version}</targetJdk>
           <failOnViolation>true</failOnViolation>
+          <linkXRef>false</linkXRef>
           <verbose>true</verbose>
         </configuration>
         <executions>
@@ -152,6 +154,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -164,6 +167,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.0.1</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>

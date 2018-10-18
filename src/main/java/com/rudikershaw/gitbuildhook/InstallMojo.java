@@ -18,6 +18,7 @@ import com.rudikershaw.gitbuildhook.hook.type.GitHookType;
 /** Mojo for installing Git hooks. */
 @Mojo(name = "install", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class InstallMojo extends AbstractMojo {
+
     /** The location of a pre-commit hook script as specified in the plugin configuration. */
     @Parameter(readonly = true)
     private String preCommit;

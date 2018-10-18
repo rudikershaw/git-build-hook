@@ -13,6 +13,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 /** Mojo for intializing a Git repository if one does not already exist. */
 @Mojo(name = "initialize", defaultPhase = LifecyclePhase.INITIALIZE)
 public class InitialiseMojo extends AbstractMojo {
+
     /** Injected MavenProject containing project related information such as base directory. */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
