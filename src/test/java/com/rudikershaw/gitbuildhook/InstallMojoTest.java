@@ -1,30 +1,17 @@
 package com.rudikershaw.gitbuildhook;
 
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.apache.maven.it.Verifier;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.testing.MojoRule;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
-public class GitBuildHookMojoTest {
-
-    @Rule
-    public MojoRule rule = new MojoRule();
-
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
+public class InstallMojoTest extends AbstractMojoTest {
     /**
      * Test the basic running of the plugin.
      *
@@ -36,9 +23,9 @@ public class GitBuildHookMojoTest {
         assertNotNull(pom);
         assertTrue(pom.exists());
 
-        final GitBuildHookMojo gitBuildHookMojo = (GitBuildHookMojo) rule.lookupConfiguredMojo(pom, "check");
-        assertNotNull(gitBuildHookMojo);
-        gitBuildHookMojo.execute();
+        final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(pom, "install");
+        assertNotNull(installMojo);
+        installMojo.execute();
     }
 
     /**
@@ -47,14 +34,14 @@ public class GitBuildHookMojoTest {
      * @throws IOException if a temp project cannot be created for testing.
      */
     @Test(expected = MojoFailureException.class)
-    public void testFailureFromLackingGitRepo() throws Exception
-    {
+    public void testFailureFromLackingGitRepo() throws Exception {
         moveToTempTestDirectory("default-test-project", "pom.xml");
 
-        assertTrue(folder.getRoot().exists());
-        final GitBuildHookMojo gitBuildHookMojo = (GitBuildHookMojo) rule.lookupConfiguredMojo(folder.getRoot(), "check");
-        assertNotNull(gitBuildHookMojo);
-        gitBuildHookMojo.execute();
+        final File rootFolder = getFolder().getRoot();
+        assertTrue(rootFolder.exists());
+        final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
+        assertNotNull(installMojo);
+        installMojo.execute();
     }
 
     /**
@@ -63,12 +50,12 @@ public class GitBuildHookMojoTest {
      * @throws IOException if a temp project cannot be created for testing.
      */
     @Test
-    public void testInitialiseNewGitRepo() throws Exception
-    {
-        moveToTempTestDirectory("test-project-with-initialise-true", "pom.xml");
+    public void testInitialiseNewGitRepo() throws Exception {
+        moveToTempTestDirectory("test-project-initialise", "pom.xml");
 
-        assertTrue(folder.getRoot().exists());
-        final Verifier verifier = new Verifier(folder.getRoot().toString());
+        final File rootFolder = getFolder().getRoot();
+        assertTrue(rootFolder.exists());
+        final Verifier verifier = new Verifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
         verifier.assertFilePresent(".git");
@@ -81,13 +68,13 @@ public class GitBuildHookMojoTest {
      * @throws IOException if a temp project cannot be created for testing.
      */
     @Test
-    public void testInstallTwoHooks() throws Exception
-    {
-        moveToTempTestDirectory("test-project-with-hooks", "pom.xml");
-        moveToTempTestDirectory("test-project-with-hooks", "hook-to-install.sh");
+    public void testInstallTwoHooks() throws Exception {
+        moveToTempTestDirectory("test-project-install-hooks", "pom.xml");
+        moveToTempTestDirectory("test-project-install-hooks", "hook-to-install.sh");
 
-        assertTrue(folder.getRoot().exists());
-        final Verifier verifier = new Verifier(folder.getRoot().toString());
+        final File rootFolder = getFolder().getRoot();
+        assertTrue(rootFolder.exists());
+        final Verifier verifier = new Verifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
         verifier.assertFilePresent(".git/hooks/pre-commit");
@@ -100,18 +87,6 @@ public class GitBuildHookMojoTest {
         verifier.assertFilePresent(".git/hooks/applypatch-msg");
         verifier.assertFilePresent(".git/hooks/pre-applypatch");
         verifier.resetStreams();
-    }
-
-    /**
-     * Move a file for a specified test folder into a temporary directory for testing.
-     *
-     * @param testName the name of the test directory in which the files are kept.
-     * @param fileName the name of the file to move into the temporary directory.
-     * @throws IOException if moving the file in question fails.
-     */
-    private void moveToTempTestDirectory(final String testName, final String fileName) throws IOException {
-        Files.copy(Paths.get("target/test-classes/" + testName + "/" + fileName),
-                Paths.get(folder.getRoot().getAbsolutePath() + "/" + fileName));
     }
 }
 
