@@ -11,19 +11,13 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import com.rudikershaw.gitbuildhook.hook.type.GitHookType;
 
-/** Starting location for the Git Build Hook plugin and home of the execute method. */
-@Mojo(name = "check", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
-public class GitBuildHookMojo extends AbstractMojo {
-
-    /** Whether to initialise a git repository if one does not already exist. */
-    @Parameter(readonly = true)
-    private boolean initialise;
-
+/** Mojo for installing Git hooks. */
+@Mojo(name = "install", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+public class InstallMojo extends AbstractMojo {
     /** The location of a pre-commit hook script as specified in the plugin configuration. */
     @Parameter(readonly = true)
     private String preCommit;
@@ -76,8 +70,6 @@ public class GitBuildHookMojo extends AbstractMojo {
             } catch (final IOException e) {
                 failBuildBecauseRepoCouldNotBeFound(e);
             }
-        } else if (initialise) {
-            initialiseGitRepository();
         } else {
             failBuildBecauseRepoCouldNotBeFound(null);
         }
@@ -94,19 +86,6 @@ public class GitBuildHookMojo extends AbstractMojo {
         installGitHook(GitHookType.PREPARE_COMMIT_MSG, prepareCommitMsg, hooksDirectory);
         installGitHook(GitHookType.UPDATE, update, hooksDirectory);
         installGitHook(GitHookType.POST_UPDATE, postUpdate, hooksDirectory);
-    }
-
-    /**
-     * Initialise a new git repository in the Maven project base directory.
-     *
-     * @throws MojoFailureException to fail the build and with details of the failure.
-     */
-    private void initialiseGitRepository() throws MojoFailureException {
-        try {
-            Git.init().setDirectory(project.getBasedir()).call();
-        } catch (final GitAPIException e) {
-            failBuildBecauseRepoCouldNotBeFound(e);
-        }
     }
 
     /**

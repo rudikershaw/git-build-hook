@@ -16,8 +16,6 @@ A Maven plugin used to install Git hooks in the local project and repository, wi
       <groupId>com.rudikershaw.gitbuildhook</groupId>
       <artifactId>git-build-hook-maven-plugin</artifactId>
       <configuration>
-        <!-- Whether to inititalise a Git repo if one does not already exist. Defaults to false -->
-        <initialise>true</initialise>
         <!-- The locations of a variety of different hooks to install in the local project. -->
         <preCommit>path/to/hook.sh</preCommit>
         <prePush>path/to/hook.sh</prePush>
@@ -32,7 +30,11 @@ A Maven plugin used to install Git hooks in the local project and repository, wi
       <executions>
         <execution>
           <goals>
-            <goal>check</goal>
+            <!-- Inititalise a Git repository if one does not already exist. -->
+            <goal>initialize</goal>
+            
+            <!-- Install Git hooks. -->
+            <goal>install</goal>
           </goals>
         </execution>
       </executions>

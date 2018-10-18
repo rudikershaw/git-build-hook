@@ -16,7 +16,6 @@
         <groupId>com.rudikershaw.gitbuildhook</groupId>
         <artifactId>git-build-hook-maven-plugin</artifactId>
         <configuration>
-          <initialise>true</initialise>
           <preCommit>hook-to-install.sh</preCommit>
           <prePush>hook-to-install.sh</prePush>
           <preRebase>hook-to-install.sh</preRebase>
@@ -30,7 +29,8 @@
         <executions>
           <execution>
             <goals>
-              <goal>check</goal>
+              <goal>initialize</goal>
+              <goal>install</goal>
             </goals>
           </execution>
         </executions>
