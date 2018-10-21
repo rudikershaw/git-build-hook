@@ -96,6 +96,43 @@
 
   <build>
     <plugins>
+      <!-- Override jar and install plugin for extra pre-test install to a custom repo for testing. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>package-for-testing</id>
+            <phase>process-test-resources</phase>
+            <configuration>
+              <classifier>TEST</classifier>
+            </configuration>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>3.0.0-M1</version>
+        <executions>
+          <execution>
+            <id>install-for-testing</id>
+            <configuration>
+              <file>${project.basedir}/target/${artifactId}-${version}-TEST.jar</file>
+              <localRepositoryPath>${project.basedir}/target/test-repo</localRepositoryPath>
+            </configuration>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>

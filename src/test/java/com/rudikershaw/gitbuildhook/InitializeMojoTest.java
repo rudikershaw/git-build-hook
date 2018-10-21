@@ -21,7 +21,7 @@ public class InitializeMojoTest extends AbstractMojoTest {
 
         final File rootFolder = getFolder().getRoot();
         assertTrue(rootFolder.exists());
-        final Verifier verifier = new Verifier(rootFolder.toString());
+        final Verifier verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
         verifier.assertFilePresent(".git");

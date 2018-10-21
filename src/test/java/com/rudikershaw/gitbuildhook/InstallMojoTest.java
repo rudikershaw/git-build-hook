@@ -50,31 +50,13 @@ public class InstallMojoTest extends AbstractMojoTest {
      * @throws IOException if a temp project cannot be created for testing.
      */
     @Test
-    public void testInitialiseNewGitRepo() throws Exception {
-        moveToTempTestDirectory("test-project-initialise", "pom.xml");
-
-        final File rootFolder = getFolder().getRoot();
-        assertTrue(rootFolder.exists());
-        final Verifier verifier = new Verifier(rootFolder.toString());
-        verifier.executeGoal("install");
-        verifier.verifyErrorFreeLog();
-        verifier.assertFilePresent(".git");
-        verifier.resetStreams();
-    }
-
-    /**
-     * Tests that a new repo is initialised if none exists and the initialise flag is configured.
-     *
-     * @throws IOException if a temp project cannot be created for testing.
-     */
-    @Test
     public void testInstallTwoHooks() throws Exception {
         moveToTempTestDirectory("test-project-install-hooks", "pom.xml");
         moveToTempTestDirectory("test-project-install-hooks", "hook-to-install.sh");
 
         final File rootFolder = getFolder().getRoot();
         assertTrue(rootFolder.exists());
-        final Verifier verifier = new Verifier(rootFolder.toString());
+        final Verifier verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
         verifier.assertFilePresent(".git/hooks/pre-commit");

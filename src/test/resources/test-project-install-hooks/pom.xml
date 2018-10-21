@@ -15,6 +15,7 @@
       <plugin>
         <groupId>com.rudikershaw.gitbuildhook</groupId>
         <artifactId>git-build-hook-maven-plugin</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
         <configuration>
           <preCommit>hook-to-install.sh</preCommit>
           <prePush>hook-to-install.sh</prePush>
