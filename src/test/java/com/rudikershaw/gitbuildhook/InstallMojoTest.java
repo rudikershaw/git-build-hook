@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.maven.it.Verifier;
 import org.apache.maven.plugin.MojoFailureException;
@@ -69,6 +70,34 @@ public class InstallMojoTest extends AbstractMojoTest {
         verifier.assertFilePresent(".git/hooks/applypatch-msg");
         verifier.assertFilePresent(".git/hooks/pre-applypatch");
         verifier.resetStreams();
+    }
+
+    /**
+     * Test that you can update hooks by installing one file over another.
+     *
+     * @throws Exception if a temp project cannot be created for testing.
+     */
+    @Test
+    public void testUpdateHooks() throws Exception {
+        moveToTempTestDirectory("test-project-reinstall-hooks", "pom.xml");
+        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-install.sh");
+        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-reinstall.sh");
+
+        final File rootFolder = getFolder().getRoot();
+        Verifier verifier = getVerifier(rootFolder.toString());
+        verifier.executeGoal("install");
+        verifier.verifyErrorFreeLog();
+        verifier.assertFilePresent(".git/hooks/pre-commit");
+        List<String> lines = verifier.loadFile(new File(rootFolder, ".git/hooks/pre-commit"), false);
+        assertTrue(lines.contains("install"));
+
+        moveToTempTestDirectory("test-project-reinstall-hooks", "pom2.xml", "pom.xml");
+        verifier = getVerifier(rootFolder.toString());
+        verifier.executeGoal("install");
+        verifier.verifyErrorFreeLog();
+        verifier.assertFilePresent(".git/hooks/pre-commit");
+        lines = verifier.loadFile(new File(rootFolder, ".git/hooks/pre-commit"), false);
+        assertTrue(lines.contains("reinstall"));
     }
 }
 

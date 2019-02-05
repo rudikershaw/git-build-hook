@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.plugin.testing.MojoRule;
@@ -47,8 +48,20 @@ public class AbstractMojoTest {
      * @throws IOException if moving the file in question fails.
      */
     protected void moveToTempTestDirectory(final String testName, final String fileName) throws IOException {
+        moveToTempTestDirectory(testName, fileName, fileName);
+    }
+
+    /**
+     * Move a file for a specified test folder into a temporary directory for testing.
+     *
+     * @param testName the name of the test directory in which the files are kept.
+     * @param fileName the name of the file to move into the temporary directory.
+     * @throws IOException if moving the file in question fails.
+     */
+    protected void moveToTempTestDirectory(final String testName, final String fileName, final String newFileName) throws IOException {
         Files.copy(Paths.get("target/test-classes/" + testName + "/" + fileName),
-                   Paths.get(folder.getRoot().getAbsolutePath() + "/" + fileName));
+                   Paths.get(folder.getRoot().getAbsolutePath() + "/" + newFileName),
+                   StandardCopyOption.REPLACE_EXISTING);
     }
 
     /**
