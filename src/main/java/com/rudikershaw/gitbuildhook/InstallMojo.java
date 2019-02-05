@@ -3,6 +3,7 @@ package com.rudikershaw.gitbuildhook;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
@@ -99,7 +100,8 @@ public class InstallMojo extends AbstractMojo {
     private void installGitHook(final GitHookType hookType, final String filePath, final String hooksDirectory) {
         if (filePath != null) {
             try {
-                Files.copy(Paths.get(filePath), Paths.get(hooksDirectory + "/" + hookType.getHookFileName()));
+                Files.copy(Paths.get(filePath), Paths.get(hooksDirectory + "/" + hookType.getHookFileName()),
+                        StandardCopyOption.REPLACE_EXISTING);
             } catch (final IOException e) {
                 getLog().warn("Could not move file into .git/hooks directory", e);
             }
