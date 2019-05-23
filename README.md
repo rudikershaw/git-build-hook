@@ -1,3 +1,5 @@
+![Build status](https://travis-ci.org/rudikershaw/git-build-hook.svg?branch=master)
+
 # Git Build Hook Maven Plugin
 A Maven plugin used to install Git hooks in the local project and repository, with options to fail the build if no Git repository was detected or to initialise a repo if one does not already exist. Without any configuration the default behavior is to fail the build if the project is not managed by a Git repository.
 
