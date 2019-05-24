@@ -1,4 +1,4 @@
-![Build status](https://travis-ci.org/rudikershaw/git-build-hook.svg?branch=master)
+[![Build Status][travis-image]][travis-url]
 
 # Git Build Hook Maven Plugin
 A Maven plugin used to install Git hooks in the local project and repository, with options to fail the build if no Git repository was detected or to initialise a repo if one does not already exist. Without any configuration the default behavior is to fail the build if the project is not managed by a Git repository.
@@ -52,3 +52,6 @@ A Maven plugin used to install Git hooks in the local project and repository, wi
 Some web-based hosting services for version control using Git, do not allow server side hooks. Server side hooks are extremely useful for enforcing certain styles of commit message, restricting the kind and types of actions that can be performed against certain branches, and providing useful feedback or advice during certain actions in Git, and much more. These kinds of abilities are almost essential for managing any large group of developers working on a project. 
 
 If you cannot perform these kind of actions server side for all your developers, what else can be done? Well, the hooks can be installed on the developers local machines. But it can be difficult to organise large groups of people to install these hooks and even more difficult to get updates for your hooks out to everyone. If only there was some way that the hooks could be managed in your project repository and installed automatically during your build. Now you should understand what this plugin is really for. 
+
+[travis-image]: https://travis-ci.org/rudikershaw/git-build-hook.svg?branch=master
+[travis-url]: https://travis-ci.org/rudikershaw/git-build-hook
