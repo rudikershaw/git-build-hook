@@ -1,3 +1,4 @@
+[![MIT Licence][licence-image]][licence-url]
 [![Build Status][travis-image]][travis-url]
 [![Maven Central][maven-central-image]][maven-central-url]
 
@@ -54,6 +55,8 @@ Some web-based hosting services for version control using Git, do not allow serv
 
 If you cannot perform these kind of actions server side for all your developers, what else can be done? Well, the hooks can be installed on the developers local machines. But it can be difficult to organise large groups of people to install these hooks and even more difficult to get updates for your hooks out to everyone. If only there was some way that the hooks could be managed in your project repository and installed automatically during your build. Now you should understand what this plugin is really for. 
 
+[licence-image]: http://img.shields.io/npm/l/gulp-rtlcss.svg?style=flat
+[licence-url]: https://tldrlegal.com/license/mit-license
 [travis-image]: https://travis-ci.org/rudikershaw/git-build-hook.svg?branch=master
 [travis-url]: https://travis-ci.org/rudikershaw/git-build-hook
 [maven-central-image]: https://maven-badges.herokuapp.com/maven-central/com.rudikershaw.gitbuildhook/git-build-hook-maven-plugin/badge.svg
