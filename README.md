@@ -19,7 +19,7 @@ A Maven plugin used to install Git hooks in the local project and repository, wi
     <plugin>
       <groupId>com.rudikershaw.gitbuildhook</groupId>
       <artifactId>git-build-hook-maven-plugin</artifactId>
-      <version>2.0.2</version>
+      <version>2.0.3</version>
       <configuration>
         <!-- The locations of a variety of different hooks to install in the local project. -->
         <preCommit>path/to/hook.sh</preCommit>
