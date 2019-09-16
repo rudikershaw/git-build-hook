@@ -5,7 +5,7 @@
 
   <groupId>com.rudikershaw.gitbuildhook</groupId>
   <artifactId>git-build-hook-maven-plugin</artifactId>
-  <version>2.0.3</version>
+  <version>2.0.4-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Git Build Hook Maven Plugin</name>
