@@ -5,20 +5,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import com.rudikershaw.gitbuildhook.hook.type.GitHookType;
+import com.rudikershaw.gitbuildhook.validation.GitRepositoryValidator;
 
 /** Mojo for installing Git hooks. */
-@Mojo(name = "install", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
-public class InstallMojo extends AbstractMojo {
+@Mojo(name = "install", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
+public class InstallMojo extends GitRepositoryValidator {
 
     /** The location of a pre-commit hook script as specified in the plugin configuration. */
     @Parameter(readonly = true)
@@ -62,20 +61,10 @@ public class InstallMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoFailureException {
+        // This goal requires the project to have a git repository initialized.
+        validateGitRepository(project);
+
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
-        repoBuilder.findGitDir(project.getBasedir());
-
-        if (repoBuilder.getGitDir() != null) {
-            try (Git git = Git.open(repoBuilder.getGitDir())) {
-                getLog().info("Found the local git repository.");
-                getLog().info("Current branch '" + git.getRepository().getBranch() + "'.");
-            } catch (final IOException e) {
-                failBuildBecauseRepoCouldNotBeFound(e);
-            }
-        } else {
-            failBuildBecauseRepoCouldNotBeFound(null);
-        }
-
         repoBuilder.findGitDir(project.getBasedir());
         final String hooksDirectory = repoBuilder.getGitDir().toString() + "/hooks";
 
@@ -106,17 +95,5 @@ public class InstallMojo extends AbstractMojo {
                 getLog().warn("Could not move file into .git/hooks directory", e);
             }
         }
-    }
-
-    /**
-     * Throws a MojoFailureException to fail the build.
-     * Notifies the user that a git repository could not be found.
-     *
-     * @param e an exception that caused the build to fail.
-     * @throws MojoFailureException to fail the build and with details of the failure.
-     */
-    private void failBuildBecauseRepoCouldNotBeFound(final Exception e) throws MojoFailureException {
-        final String message = "Could not find or initialise a local git repository. A repository is required.";
-        throw new MojoFailureException(message, e);
     }
 }
