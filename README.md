@@ -14,7 +14,9 @@ A Maven plugin used to install Git hooks in the local project and repository, wi
 * Fail the build if your project is not being managed by Git.
 * Use with Maven archetypes to initialise Git repository with the first build.
 
-## Example Usage
+## Basic Usage
+
+Put all your Git hooks in a directory in your project, then configure your `pom.xml` to include the following plugin declaration, goal, and configuration.
 
 ```$xml
 <build>
@@ -24,25 +26,14 @@ A Maven plugin used to install Git hooks in the local project and repository, wi
       <artifactId>git-build-hook-maven-plugin</artifactId>
       <version>2.0.3</version>
       <configuration>
-        <!-- The locations of a variety of different hooks to install in the local project. -->
-        <preCommit>path/to/hook.sh</preCommit>
-        <prePush>path/to/hook.sh</prePush>
-        <preRebase>path/to/hook.sh</preRebase>
-        <preApplyPatch>path/to/hook.sh</preApplyPatch>
-        <applyPatchMsg>path/to/hook.sh</applyPatchMsg>
-        <commitMsg>path/to/hook.sh</commitMsg>
-        <prepareCommitMsg>path/to/hook.sh</prepareCommitMsg>
-        <update>path/to/hook.sh</update>
-        <postUpdate>path/to/hook.sh</postUpdate>
+        <!-- The location of the directory you are using to store the Git hooks in your project. -->
+        <hooksPath>hooks-directory/</hooksPath>
       </configuration>
       <executions>
         <execution>
-          <goals>
-            <!-- Inititalise a Git repository if one does not already exist. -->
-            <goal>initialize</goal>
-            
-            <!-- Install Git hooks. -->
-            <goal>install</goal>
+          <goals>       
+            <!-- Configure the git hooks directory for your project. -->
+            <goal>configure</goal>
           </goals>
         </execution>
       </executions>
@@ -50,6 +41,35 @@ A Maven plugin used to install Git hooks in the local project and repository, wi
       <!-- ... etc ... -->
   </plugins>
 </build>
+```
+
+When you run your project build the plugin will configure git to run hooks out of the directory specified. This will effectively set up the hooks in that directory for everyone working on your project. If you would prefer to install individual Git hooks into the default hooks directory, then you can use the `install` goal with configuration for each hook you wish to install like so;
+
+```$xml
+...
+  <configuration>
+    <!-- The location of a git hook to install into the default hooks directory. -->
+    <preCommit>path/to/your/hook.sh</preCommit>
+    <commitMsg>path/to/your/hook.sh</commitMsg>
+  </configuration>
+...
+      <goals>       
+        <!-- Install specific hooks directly to the default hooks directory. -->
+        <goal>install</goal>
+      </goals>
+...
+```
+
+With both of the above goals, the build will fail if the project is not managed by Git. If you would prefer the plugin to, instead of failing, initialize a new Git repository at the root of the project you can do the following;
+
+```$xml
+...
+<goals>       
+  <!-- Initialize a Git repository at the root of the project if one does not exist. -->
+  <goal>initialize</goal>
+  <goal>configure</goal>
+</goals>
+...
 ```
 
 ### But why?
