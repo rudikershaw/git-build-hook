@@ -16,6 +16,7 @@ import org.apache.maven.it.Verifier;
 
 /** Abstract test for Mojos. */
 public class AbstractMojoTest {
+
     private final MojoRule rule = new MojoRule();
 
     private final TemporaryFolder folder = new TemporaryFolder();
@@ -61,7 +62,7 @@ public class AbstractMojoTest {
     protected void moveToTempTestDirectory(final String testName, final String fileName, final String newFileName) throws IOException {
         Files.copy(Paths.get("target/test-classes/" + testName + "/" + fileName),
                    Paths.get(folder.getRoot().getAbsolutePath() + "/" + newFileName),
-                   StandardCopyOption.REPLACE_EXISTING);
+                   StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
     }
 
     /**

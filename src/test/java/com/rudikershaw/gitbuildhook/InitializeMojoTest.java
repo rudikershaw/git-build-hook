@@ -10,6 +10,7 @@ import org.junit.Test;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
 public class InitializeMojoTest extends AbstractMojoTest {
+
     /**
      * Tests that a new repo is initialised if none exists and the initialise flag is configured.
      *

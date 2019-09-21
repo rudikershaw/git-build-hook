@@ -13,6 +13,7 @@ import org.junit.Test;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
 public class InstallMojoTest extends AbstractMojoTest {
+
     /**
      * Test the basic running of the plugin.
      *
