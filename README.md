@@ -24,7 +24,7 @@ Put all your Git hooks in a directory in your project, then configure your `pom.
     <plugin>
       <groupId>com.rudikershaw.gitbuildhook</groupId>
       <artifactId>git-build-hook-maven-plugin</artifactId>
-      <version>2.0.3</version>
+      <version>2.1.0</version>
       <configuration>
         <!-- The location of the directory you are using to store the Git hooks in your project. -->
         <hooksPath>hooks-directory/</hooksPath>
