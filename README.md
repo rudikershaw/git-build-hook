@@ -10,7 +10,7 @@ A Maven plugin used to install Git hooks in the local project and repository, wi
 
 ## Key Features
 
-* Install client side git hooks for the project using Maven.
+* Install client side (local) git hooks for the project using Maven.
 * Fail the build if your project is not being managed by Git.
 * Use with Maven archetypes to initialise Git repository with the first build.
 
