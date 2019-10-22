@@ -6,17 +6,18 @@
 
 # Git Build Hook Maven Plugin 
 
-A Maven plugin used to install Git hooks in the local project and repository, with options to fail the build if no Git repository was detected or to initialise a repo if one does not already exist. Without any configuration the default behavior is to fail the build if the project is not managed by a Git repository.
+A Maven plugin used to add configuration, install git hooks, and initialize the local project's git repository. It is common for a team or project to need to manage client side git configuration. For example, you may need to install pre-commit hooks for all your developers, or insist on a particular `core.autoclrf` policy. This plugin allows you to setup configuration for every developer working on the project the first time they run your build.
 
 ## Key Features
 
-* Install client side (local) git hooks for the project using Maven.
+* Set arbitrary project specific git configuration.
+* Install client side (local) git hooks for the project.
 * Fail the build if your project is not being managed by Git.
 * Use with Maven archetypes to initialise Git repository with the first build.
 
 ## Basic Usage
 
-Put all your Git hooks in a directory in your project, then configure your `pom.xml` to include the following plugin declaration, goal, and configuration.
+A common use-case might be to install local git hooks by setting the `core.hooksPath` configuration. Put all your Git hooks in a directory in your project, then configure your `pom.xml` to include the following plugin declaration, goal, and configuration.
 
 ```$xml
 <build>
@@ -24,15 +25,19 @@ Put all your Git hooks in a directory in your project, then configure your `pom.
     <plugin>
       <groupId>com.rudikershaw.gitbuildhook</groupId>
       <artifactId>git-build-hook-maven-plugin</artifactId>
-      <version>2.1.0</version>
+      <version>3.0.0</version>
       <configuration>
-        <!-- The location of the directory you are using to store the Git hooks in your project. -->
-        <hooksPath>hooks-directory/</hooksPath>
+        <gitConfig>
+          <!-- The location of the directory you are using to store the Git hooks in your project. -->
+          <core.hooksPath>hooks-directory/</hooksPath>
+          <!-- Some other project specific git config that you want to set. -->
+          <custom.configuration>true</custom.configuration> 
+        </gitConfig>
       </configuration>
       <executions>
         <execution>
           <goals>       
-            <!-- Configure the git hooks directory for your project. -->
+            <!-- Sets git config specified under configuration > gitConfig. -->
             <goal>configure</goal>
           </goals>
         </execution>
@@ -43,14 +48,16 @@ Put all your Git hooks in a directory in your project, then configure your `pom.
 </build>
 ```
 
-When you run your project build the plugin will configure git to run hooks out of the directory specified. This will effectively set up the hooks in that directory for everyone working on your project. If you would prefer to install individual Git hooks into the default hooks directory, then you can use the `install` goal with configuration for each hook you wish to install like so;
+When you run your project build the plugin will configure git to run hooks out of the directory specified. This will effectively set up the hooks in that directory for everyone working on your project. If you would prefer to install individual git hooks into the default hooks directory, then you can use the `install` goal with configuration for each hook you wish to install like so;
 
 ```$xml
 ...
   <configuration>
-    <!-- The location of a git hook to install into the default hooks directory. -->
-    <preCommit>path/to/your/hook.sh</preCommit>
-    <commitMsg>path/to/your/hook.sh</commitMsg>
+    <installHooks>
+      <!-- The location of a git hook to install into the default hooks directory. -->
+      <pre-commit>path/to/your/hook.sh</pre-commit>
+      <commit-msg>path/to/your/hook.sh</commit-msg>
+    </installHooks>
   </configuration>
 ...
       <goals>       
@@ -72,11 +79,13 @@ With both of the above goals, the build will fail if the project is not managed 
 ...
 ```
 
-### But why?
+### Wait, but why?
 
-Some web-based hosting services for version control using Git, do not allow server side hooks. Server side hooks are extremely useful for enforcing certain styles of commit message, restricting the kind and types of actions that can be performed against certain branches, and providing useful feedback or advice during certain actions in Git, and much more. These kinds of abilities are almost essential for managing any large group of developers working on a project. 
+Many web-based hosting services for version control using Git, do not allow server side hooks. Server side hooks are extremely useful for enforcing certain styles of commit message, restricting the kind and types of actions that can be performed against certain branches, providing useful feedback or advice during certain actions in Git, and much more. This kinds of quick feedback is advantageous when managing any large group of developers. 
 
-If you cannot perform these kind of actions server side for all your developers, what else can be done? Well, the hooks can be installed on the developers local machines. But it can be difficult to organise large groups of people to install these hooks and even more difficult to get updates for your hooks out to everyone. If only there was some way that the hooks could be managed in your project repository and installed automatically during your build. Now you should understand what this plugin is really for. 
+If you cannot perform these kind of actions server side, what else can be done? Well, the hooks can be installed on the developers local machines. But it can be difficult to organise groups of people to install these hooks and even more difficult to get updates out to everyone. 
+
+If only there was some way that the hooks could be managed in your project repository and installed automatically during your build. Well, that is what this plugin is for. 
 
 [licence-image]: http://img.shields.io/npm/l/gulp-rtlcss.svg?style=flat
 [licence-url]: https://tldrlegal.com/license/mit-license
