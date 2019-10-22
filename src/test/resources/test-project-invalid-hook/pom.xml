@@ -18,7 +18,7 @@
         <version>3.0.0-SNAPSHOT</version>
         <configuration>
           <installHooks>
-            <pre-commit>hook-to-reinstall.sh</pre-commit>
+            <pre-commit-oops>hook-to-install.sh</pre-commit-oops>
           </installHooks>
         </configuration>
         <executions>

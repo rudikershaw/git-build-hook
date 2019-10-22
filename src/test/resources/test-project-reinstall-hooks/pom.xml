@@ -17,7 +17,9 @@
         <artifactId>git-build-hook-maven-plugin</artifactId>
         <version>3.0.0-SNAPSHOT</version>
         <configuration>
-          <preCommit>hook-to-install.sh</preCommit>
+          <installHooks>
+            <pre-commit>hook-to-install.sh</pre-commit>
+          </installHooks>
         </configuration>
         <executions>
           <execution>

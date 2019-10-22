@@ -100,5 +100,21 @@ public class InstallMojoTest extends AbstractMojoTest {
         lines = verifier.loadFile(new File(rootFolder, ".git/hooks/pre-commit"), false);
         assertTrue(lines.contains("reinstall"));
     }
+
+    /**
+     * Tests that the plugin fails when we specify installing an invalid named hook.
+     *
+     * @throws IOException if a temp project cannot be created for testing.
+     */
+    @Test(expected = MojoFailureException.class)
+    public void testFailureFromInvalidHookNames() throws Exception {
+        moveToTempTestDirectory("test-project-invalid-hook", "pom.xml");
+
+        final File rootFolder = getFolder().getRoot();
+        assertTrue(rootFolder.exists());
+        final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
+        assertNotNull(installMojo);
+        installMojo.execute();
+    }
 }
 

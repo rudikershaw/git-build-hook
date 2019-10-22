@@ -22,7 +22,7 @@ public class GitConfigMojo extends GitRepositoryValidator {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
-    /** The location the directory to configure to be your new git hooks directory. */
+    /** The git config to set and the values to set them to. */
     @Parameter(readonly = true)
     private Map<String, String> gitConfig;
 
