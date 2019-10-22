@@ -15,9 +15,11 @@
       <plugin>
         <groupId>com.rudikershaw.gitbuildhook</groupId>
         <artifactId>git-build-hook-maven-plugin</artifactId>
-        <version>2.1.0</version>
+        <version>3.0.0</version>
         <configuration>
-          <preCommit>hook-to-install.sh</preCommit>
+          <installHooks>
+            <pre-commit>hook-to-install.sh</pre-commit>
+          </installHooks>
         </configuration>
         <executions>
           <execution>

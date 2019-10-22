@@ -11,7 +11,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.junit.Test;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
-public class ConfigureHooksPathMojoTest extends AbstractMojoTest {
+public class GitConfigMojoTest extends AbstractMojoTest {
 
     /**
      * Tests that the hook, installed by changing the hooks directory, prevents a commit.
@@ -35,6 +35,7 @@ public class ConfigureHooksPathMojoTest extends AbstractMojoTest {
 
         try (Git git = Git.open(repoBuilder.getGitDir())) {
             assertEquals("hooks-path/", git.getRepository().getConfig().getString("core", null, "hooksPath"));
+            assertEquals("custom", git.getRepository().getConfig().getString("custom", "config", "name"));
         }
     }
 }

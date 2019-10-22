@@ -15,17 +15,19 @@
       <plugin>
         <groupId>com.rudikershaw.gitbuildhook</groupId>
         <artifactId>git-build-hook-maven-plugin</artifactId>
-        <version>2.1.0</version>
+        <version>3.0.0</version>
         <configuration>
-          <preCommit>hook-to-install.sh</preCommit>
-          <prePush>hook-to-install.sh</prePush>
-          <preRebase>hook-to-install.sh</preRebase>
-          <preApplyPatch>hook-to-install.sh</preApplyPatch>
-          <applyPatchMsg>hook-to-install.sh</applyPatchMsg>
-          <commitMsg>hook-to-install.sh</commitMsg>
-          <prepareCommitMsg>hook-to-install.sh</prepareCommitMsg>
-          <update>hook-to-install.sh</update>
-          <postUpdate>hook-to-install.sh</postUpdate>
+          <installHooks>
+            <pre-commit>hook-to-install.sh</pre-commit>
+            <pre-push>hook-to-install.sh</pre-push>
+            <pre-rebase>hook-to-install.sh</pre-rebase>
+            <pre-applypatch>hook-to-install.sh</pre-applypatch>
+            <applypatch-msg>hook-to-install.sh</applypatch-msg>
+            <commit-msg>hook-to-install.sh</commit-msg>
+            <prepare-commit-msg>hook-to-install.sh</prepare-commit-msg>
+            <update>hook-to-install.sh</update>
+            <post-update>hook-to-install.sh</post-update>
+          </installHooks>
         </configuration>
         <executions>
           <execution>

@@ -15,9 +15,12 @@
       <plugin>
         <groupId>com.rudikershaw.gitbuildhook</groupId>
         <artifactId>git-build-hook-maven-plugin</artifactId>
-        <version>2.1.0</version>
+        <version>3.0.0</version>
         <configuration>
-          <hooksPath>hooks-path/</hooksPath>
+          <gitConfig>
+            <core.hooksPath>hooks-path/</core.hooksPath>
+            <custom.config.name>custom</custom.config.name>
+          </gitConfig>
         </configuration>
         <executions>
           <execution>

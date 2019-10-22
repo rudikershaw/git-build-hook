@@ -1,5 +1,7 @@
 package com.rudikershaw.gitbuildhook.hook.type;
 
+import java.util.Arrays;
+
 /** Enumerated types of Git hook. */
 public enum GitHookType {
 
@@ -49,5 +51,15 @@ public enum GitHookType {
      */
     public String getHookFileName() {
         return hookFileName;
+    }
+
+    /**
+     * Takes a string filename and returns true if, and only if, the string is a valid hook name.
+     *
+     * @param filename the filename to check.
+     * @return true if the provided string is a valid hook name, otherwise false.
+     */
+    public static boolean isValidHookName(final String filename) {
+        return Arrays.stream(values()).anyMatch(h -> h.getHookFileName().equals(filename));
     }
 }
