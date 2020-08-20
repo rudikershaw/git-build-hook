@@ -29,7 +29,7 @@ A common use-case might be to install local git hooks by setting the `core.hooks
       <configuration>
         <gitConfig>
           <!-- The location of the directory you are using to store the Git hooks in your project. -->
-          <core.hooksPath>hooks-directory/</hooksPath>
+          <core.hooksPath>hooks-directory/</core.hooksPath>
           <!-- Some other project specific git config that you want to set. -->
           <custom.configuration>true</custom.configuration> 
         </gitConfig>
