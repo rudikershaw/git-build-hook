@@ -126,7 +126,7 @@ public class InstallMojoTest extends AbstractMojoTest {
      *
      * @throws IOException if a temp project cannot be created for testing.
      */
-    @Test(expected = MojoFailureException.class)
+    @Test
     public void testFailureFromInvalidHookNames() throws Exception {
         final TemporaryFolder folder = getFolder();
         moveToTempTestDirectory("test-project-invalid-hook", "pom.xml", folder);
@@ -135,7 +135,10 @@ public class InstallMojoTest extends AbstractMojoTest {
         assertTrue(rootFolder.exists());
         final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
         assertNotNull(installMojo);
-        installMojo.execute();
+
+        final Executable testMethod = () -> installMojo.execute();
+        final MojoFailureException thrown = assertThrows(MojoFailureException.class, testMethod);
+        assertThat(thrown.getMessage(), Is.is(IsEqual.equalTo("Could not find or initialise a local git repository. A repository is required.")));
     }
 
 }
