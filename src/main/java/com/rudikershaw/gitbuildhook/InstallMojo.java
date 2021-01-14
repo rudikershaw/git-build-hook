@@ -1,12 +1,17 @@
 package com.rudikershaw.gitbuildhook;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -56,13 +61,36 @@ public class InstallMojo extends GitRepositoryValidator {
      * @param hooksDirectory the directory in which to install the hook.
      */
     private void installGitHook(final String hookName, final String filePath, final String hooksDirectory) {
-        if (filePath != null) {
+        if (Objects.isNull(filePath)) {
+            return;
+        }
+        final String gitHookPathStr = String.format("%s/%s", hooksDirectory, hookName);
+        if (Paths.get(filePath)
+                .toFile()
+                .isFile()) {
             try {
-                Files.copy(Paths.get(filePath), Paths.get(hooksDirectory + "/" + hookName),
+                Files.copy(Paths.get(filePath), Paths.get(gitHookPathStr),
                         StandardCopyOption.REPLACE_EXISTING);
             } catch (final IOException e) {
                 getLog().warn("Could not move file into .git/hooks directory", e);
             }
+
+        } else {
+            final URL resource = this.getClass().getClassLoader().getResource(filePath);
+            if (Objects.isNull(resource)) {
+                getLog().warn("Could not find file on filesytem or classpath");
+                return;
+            }
+
+            try {
+                final File gitHookFile = Paths.get(gitHookPathStr)
+                        .toFile();
+                IOUtils.copy(resource.openStream(), new FileOutputStream(gitHookFile));
+                gitHookFile.setExecutable(true);
+            } catch (IOException e) {
+                getLog().warn("Could not move file from classpath into .git/hooks directory", e);
+            }
         }
     }
+
 }
