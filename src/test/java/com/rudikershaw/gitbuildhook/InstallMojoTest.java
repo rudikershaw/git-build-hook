@@ -89,16 +89,24 @@ public class InstallMojoTest extends AbstractMojoTest {
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
         verifier.assertFilePresent(".git/hooks/pre-commit");
+        verifier.assertFilePresent(".git/hooks/commit-msg");
+
         List<String> lines = verifier.loadFile(new File(rootFolder, ".git/hooks/pre-commit"), false);
         assertTrue(lines.contains("install"));
+        List<String> origionalCommitMsgLines = verifier.loadFile(new File(rootFolder, ".git/hooks/commit-msg"), false);
+        assertTrue(origionalCommitMsgLines.contains("origional hook"));
 
         moveToTempTestDirectory("test-project-reinstall-hooks", "pom2.xml", "pom.xml");
         verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
         verifier.assertFilePresent(".git/hooks/pre-commit");
+        verifier.assertFilePresent(".git/hooks/commit-msg");
+
         lines = verifier.loadFile(new File(rootFolder, ".git/hooks/pre-commit"), false);
         assertTrue(lines.contains("reinstall"));
+        List<String> updatedCommitMsgLines = verifier.loadFile(new File(rootFolder, ".git/hooks/commit-msg"), false);
+        assertTrue(updatedCommitMsgLines.contains("updated hook"));
     }
 
     /**
@@ -116,5 +124,5 @@ public class InstallMojoTest extends AbstractMojoTest {
         assertNotNull(installMojo);
         installMojo.execute();
     }
-}
 
+}

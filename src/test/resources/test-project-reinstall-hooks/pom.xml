@@ -19,8 +19,16 @@
         <configuration>
           <installHooks>
             <pre-commit>hook-to-install.sh</pre-commit>
+            <commit-msg>com/rudikershaw/gitbuildhook/tests/cphooks/reinstall-hook-origional.sh</commit-msg>
           </installHooks>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.rudikershaw.gitbuildhook</groupId>
+            <artifactId>testing-cp-hooks</artifactId>
+            <version>1.2.3</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <goals>

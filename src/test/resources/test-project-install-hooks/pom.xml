@@ -24,12 +24,19 @@
             <pre-rebase>hook-to-install.sh</pre-rebase>
             <pre-applypatch>hook-to-install.sh</pre-applypatch>
             <applypatch-msg>hook-to-install.sh</applypatch-msg>
-            <commit-msg>hook-to-install.sh</commit-msg>
-            <prepare-commit-msg>hook-to-install.sh</prepare-commit-msg>
-            <update>hook-to-install.sh</update>
-            <post-update>hook-to-install.sh</post-update>
+            <commit-msg>com/rudikershaw/gitbuildhook/tests/cphooks/hook-to-install-from-cp.sh</commit-msg>
+            <prepare-commit-msg>com/rudikershaw/gitbuildhook/tests/cphooks/hook-to-install-from-cp.sh</prepare-commit-msg>
+            <update>com/rudikershaw/gitbuildhook/tests/cphooks/hook-to-install-from-cp.sh</update>
+            <post-update>com/rudikershaw/gitbuildhook/tests/cphooks/hook-to-install-from-cp.sh</post-update>
           </installHooks>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.rudikershaw.gitbuildhook</groupId>
+            <artifactId>testing-cp-hooks</artifactId>
+            <version>1.2.3</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <goals>
