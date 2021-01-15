@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.maven.it.Verifier;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
 public class InstallMojoTest extends AbstractMojoTest {
@@ -37,9 +38,10 @@ public class InstallMojoTest extends AbstractMojoTest {
      */
     @Test(expected = MojoFailureException.class)
     public void testFailureFromLackingGitRepo() throws Exception {
-        moveToTempTestDirectory("default-test-project", "pom.xml");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("default-test-project", "pom.xml", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         assertTrue(rootFolder.exists());
         final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
         assertNotNull(installMojo);
@@ -53,10 +55,11 @@ public class InstallMojoTest extends AbstractMojoTest {
      */
     @Test
     public void testInstallTwoHooks() throws Exception {
-        moveToTempTestDirectory("test-project-install-hooks", "pom.xml");
-        moveToTempTestDirectory("test-project-install-hooks", "hook-to-install.sh");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("test-project-install-hooks", "pom.xml", folder);
+        moveToTempTestDirectory("test-project-install-hooks", "hook-to-install.sh", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         assertTrue(rootFolder.exists());
         final Verifier verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
@@ -80,11 +83,12 @@ public class InstallMojoTest extends AbstractMojoTest {
      */
     @Test
     public void testUpdateHooks() throws Exception {
-        moveToTempTestDirectory("test-project-reinstall-hooks", "pom.xml");
-        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-install.sh");
-        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-reinstall.sh");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("test-project-reinstall-hooks", "pom.xml", folder);
+        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-install.sh", folder);
+        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-reinstall.sh", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         Verifier verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
@@ -96,7 +100,7 @@ public class InstallMojoTest extends AbstractMojoTest {
         List<String> origionalCommitMsgLines = verifier.loadFile(new File(rootFolder, ".git/hooks/commit-msg"), false);
         assertTrue(origionalCommitMsgLines.contains("origional hook"));
 
-        moveToTempTestDirectory("test-project-reinstall-hooks", "pom2.xml", "pom.xml");
+        moveToTempTestDirectory("test-project-reinstall-hooks", "pom2.xml", "pom.xml", folder);
         verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
@@ -116,9 +120,10 @@ public class InstallMojoTest extends AbstractMojoTest {
      */
     @Test(expected = MojoFailureException.class)
     public void testFailureFromInvalidHookNames() throws Exception {
-        moveToTempTestDirectory("test-project-invalid-hook", "pom.xml");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("test-project-invalid-hook", "pom.xml", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         assertTrue(rootFolder.exists());
         final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
         assertNotNull(installMojo);

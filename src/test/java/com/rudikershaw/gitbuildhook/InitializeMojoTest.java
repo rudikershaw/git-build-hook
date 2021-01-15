@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.apache.maven.it.Verifier;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
 public class InitializeMojoTest extends AbstractMojoTest {
@@ -18,9 +19,10 @@ public class InitializeMojoTest extends AbstractMojoTest {
      */
     @Test
     public void testInitialiseNewGitRepo() throws Exception {
-        moveToTempTestDirectory("test-project-initialise", "pom.xml");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("test-project-initialise", "pom.xml", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         assertTrue(rootFolder.exists());
         final Verifier verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
@@ -28,5 +30,5 @@ public class InitializeMojoTest extends AbstractMojoTest {
         verifier.assertFilePresent(".git");
         verifier.resetStreams();
     }
-}
 
+}
