@@ -1,6 +1,6 @@
 package com.rudikershaw.gitbuildhook;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,7 +77,7 @@ public class AbstractMojoTest {
     protected Verifier getVerifier(final String project) throws VerificationException {
         final Verifier verifier = new Verifier(project);
         final File testRepsotiroyDirectory = new File("target/test-repo");
-        assertTrue("Plugin must be installed into a local repo for tests", testRepsotiroyDirectory.exists());
+        assertTrue(testRepsotiroyDirectory.exists(), "Plugin must be installed into a local repo for tests");
         verifier.setLocalRepo(testRepsotiroyDirectory.getAbsolutePath());
         return verifier;
     }
