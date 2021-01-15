@@ -10,9 +10,9 @@ import java.nio.file.StandardCopyOption;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.plugin.testing.MojoRule;
+import org.apache.maven.it.Verifier;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
-import org.apache.maven.it.Verifier;
 
 /** Abstract test for Mojos. */
 public class AbstractMojoTest {
