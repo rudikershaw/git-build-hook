@@ -97,6 +97,11 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
       <!-- Override jar and install plugin for extra pre-test install to a custom repo for testing. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
