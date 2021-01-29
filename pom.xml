@@ -112,6 +112,11 @@
         <artifactId>maven-deploy-plugin</artifactId>
         <version>3.0.0-M1</version>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.2.0</version>
+      </plugin>
       <!-- Override jar and install plugin for extra pre-test install to a custom repo for testing. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
