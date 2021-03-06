@@ -19,6 +19,7 @@
         <configuration>
           <installHooks>
             <pre-commit>hook-to-install.sh</pre-commit>
+            <pre-merge-commit>hook-to-install.sh</pre-merge-commit>
             <pre-push>hook-to-install.sh</pre-push>
             <pre-rebase>hook-to-install.sh</pre-rebase>
             <pre-applypatch>hook-to-install.sh</pre-applypatch>
