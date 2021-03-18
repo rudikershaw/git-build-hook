@@ -34,13 +34,6 @@ A common use-case might be to install local git hooks by setting the `core.hooks
           <custom.configuration>true</custom.configuration> 
         </gitConfig>
       </configuration>
-      <dependencies>
-        <dependency>
-          <groupId>my.company</groupId>
-          <artifactId>company-git-hooks</artifactId>
-          <version>[1.2.3,)</version>
-        <dependency>
-      </dependencies>
       <executions>
         <execution>
           <goals>       
@@ -59,13 +52,20 @@ When you run your project build the plugin will configure git to run hooks out o
 
 ```$xml
 ...
-  <configuration>
-    <installHooks>
-      <!-- The location of a git hook to install into the default hooks directory. -->
-      <pre-commit>file_path/to/your/hook.sh</pre-commit>
-      <commit-msg>class_path/package/hook.sh</commit-msg>
-    </installHooks>
-  </configuration>
+      <configuration>
+        <installHooks>
+          <!-- The location of a git hook to install into the default hooks directory. -->
+          <pre-commit>file_path/to/your/hook.sh</pre-commit>
+          <commit-msg>class_path/package/hook.sh</commit-msg>
+        </installHooks>
+      </configuration>
+      <dependencies>
+        <dependency>
+          <groupId>my.company</groupId>
+          <artifactId>company-git-hooks</artifactId>
+          <version>[1.2.3,)</version>
+        <dependency>
+      </dependencies>
 ...
       <goals>       
         <!-- Install specific hooks directly to the default hooks directory. -->
