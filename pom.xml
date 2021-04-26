@@ -5,7 +5,7 @@
 
   <groupId>com.rudikershaw.gitbuildhook</groupId>
   <artifactId>git-build-hook-maven-plugin</artifactId>
-  <version>3.0.0</version>
+  <version>3.1.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Git Build Hook Maven Plugin</name>
@@ -68,7 +68,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -90,18 +90,53 @@
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-verifier</artifactId>
-      <version>1.6</version>
+      <version>1.7.2</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.8.0</version>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.0.0-M1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.2.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.9.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+      </plugin>
       <!-- Override jar and install plugin for extra pre-test install to a custom repo for testing. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>package-for-testing</id>
@@ -111,6 +146,19 @@
             </configuration>
             <goals>
               <goal>jar</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>package-cphooks-for-testing</id>
+            <phase>process-test-resources</phase>
+            <configuration>
+              <classifier>CPHOOKS</classifier>
+              <includes>
+                <include>com/rudikershaw/gitbuildhook/tests/cphooks/**</include>
+              </includes>
+            </configuration>
+            <goals>
+              <goal>test-jar</goal>
             </goals>
           </execution>
         </executions>
@@ -131,18 +179,32 @@
               <goal>install-file</goal>
             </goals>
           </execution>
+          <execution>
+            <id>install-cphooks-for-testing</id>
+            <configuration>
+              <groupId>com.rudikershaw.gitbuildhook</groupId>
+              <artifactId>testing-cp-hooks</artifactId>
+              <version>1.2.3</version>
+              <file>${project.basedir}/target/${project.artifactId}-${project.version}-CPHOOKS.jar</file>
+              <localRepositoryPath>${project.basedir}/target/test-repo</localRepositoryPath>
+            </configuration>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.3</version>
+        <version>3.5.2</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.2</version>
         <configuration>
           <configLocation>etc/checkstyle/checkstyle.xml</configLocation>
         </configuration>
@@ -157,7 +219,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.7</version>
+        <version>4.2.0</version>
         <executions>
           <execution>
             <goals>
@@ -167,8 +229,9 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.10.0</version>
+        <version>3.14.0</version>
         <configuration>
           <includeTests>true</includeTests>
           <minimumTokens>100</minimumTokens>
@@ -192,7 +255,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -205,7 +268,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -218,7 +281,7 @@
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.7</version>
+        <version>1.6.8</version>
         <extensions>true</extensions>
         <configuration>
           <serverId>ossrh</serverId>
@@ -250,7 +313,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>

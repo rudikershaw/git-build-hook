@@ -8,6 +8,9 @@ public enum GitHookType {
     /** Pre commit hook. */
     PRE_COMMIT("pre-commit"),
 
+    /** Pre merge commit hook. */
+    PRE_MERGE_COMMIT("pre-merge-commit"),
+
     /** Pre push hook. */
     PRE_PUSH("pre-push"),
 

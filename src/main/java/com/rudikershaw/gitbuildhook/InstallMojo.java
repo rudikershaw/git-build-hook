@@ -1,12 +1,17 @@
 package com.rudikershaw.gitbuildhook;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -56,12 +61,47 @@ public class InstallMojo extends GitRepositoryValidator {
      * @param hooksDirectory the directory in which to install the hook.
      */
     private void installGitHook(final String hookName, final String filePath, final String hooksDirectory) {
-        if (filePath != null) {
+        if (Objects.nonNull(filePath)) {
+            final String gitHookPathStr = hooksDirectory + File.separator + hookName;
+            if (Paths.get(filePath).toFile().isFile()) {
+                copyFromFile(filePath, gitHookPathStr);
+            } else {
+                copyFromClasspath(filePath, gitHookPathStr);
+            }
+        }
+    }
+
+    /**
+     * Copies the specified file from the file system into the the default hooks directory.
+     *
+     * @param filePath path to the file to use as the hook.
+     * @param gitHookPathStr the location to move the file to.
+     */
+    private void copyFromFile(final String filePath, final String gitHookPathStr) {
+        try {
+            Files.copy(Paths.get(filePath), Paths.get(gitHookPathStr), StandardCopyOption.REPLACE_EXISTING);
+        } catch (final IOException e) {
+            getLog().warn("Could not move file into .git/hooks directory", e);
+        }
+    }
+
+    /**
+     * Copies the specified file from the classpath into the the default hooks directory.
+     *
+     * @param filePath path to the file to use as the hook.
+     * @param gitHookPathStr the location to move the file to.
+     */
+    private void copyFromClasspath(final String filePath, final String gitHookPathStr) {
+        final URL resource = this.getClass().getClassLoader().getResource(filePath);
+        if (Objects.isNull(resource)) {
+            getLog().warn("Could not find file on filesystem or classpath");
+        } else {
             try {
-                Files.copy(Paths.get(filePath), Paths.get(hooksDirectory + "/" + hookName),
-                        StandardCopyOption.REPLACE_EXISTING);
+                final File gitHookFile = Paths.get(gitHookPathStr).toFile();
+                IOUtils.copy(resource.openStream(), new FileOutputStream(gitHookFile));
+                gitHookFile.setExecutable(true);
             } catch (final IOException e) {
-                getLog().warn("Could not move file into .git/hooks directory", e);
+                getLog().warn("Could not move file from classpath into .git/hooks directory", e);
             }
         }
     }
