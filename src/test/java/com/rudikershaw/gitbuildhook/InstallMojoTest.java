@@ -1,7 +1,9 @@
 package com.rudikershaw.gitbuildhook;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +11,11 @@ import java.util.List;
 
 import org.apache.maven.it.Verifier;
 import org.apache.maven.plugin.MojoFailureException;
+import org.hamcrest.core.Is;
+import org.hamcrest.core.IsEqual;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.rules.TemporaryFolder;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
 public class InstallMojoTest extends AbstractMojoTest {
@@ -35,15 +41,19 @@ public class InstallMojoTest extends AbstractMojoTest {
      *
      * @throws IOException if a temp project cannot be created for testing.
      */
-    @Test(expected = MojoFailureException.class)
+    @Test
     public void testFailureFromLackingGitRepo() throws Exception {
-        moveToTempTestDirectory("default-test-project", "pom.xml");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("default-test-project", "pom.xml", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         assertTrue(rootFolder.exists());
         final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
         assertNotNull(installMojo);
-        installMojo.execute();
+
+        final Executable testMethod = () -> installMojo.execute();
+        final MojoFailureException thrown = assertThrows(MojoFailureException.class, testMethod);
+        assertThat(thrown.getMessage(), Is.is(IsEqual.equalTo("Could not find or initialise a local git repository. A repository is required.")));
     }
 
     /**
@@ -53,10 +63,11 @@ public class InstallMojoTest extends AbstractMojoTest {
      */
     @Test
     public void testInstallTwoHooks() throws Exception {
-        moveToTempTestDirectory("test-project-install-hooks", "pom.xml");
-        moveToTempTestDirectory("test-project-install-hooks", "hook-to-install.sh");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("test-project-install-hooks", "pom.xml", folder);
+        moveToTempTestDirectory("test-project-install-hooks", "hook-to-install.sh", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         assertTrue(rootFolder.exists());
         final Verifier verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
@@ -80,11 +91,12 @@ public class InstallMojoTest extends AbstractMojoTest {
      */
     @Test
     public void testUpdateHooks() throws Exception {
-        moveToTempTestDirectory("test-project-reinstall-hooks", "pom.xml");
-        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-install.sh");
-        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-reinstall.sh");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("test-project-reinstall-hooks", "pom.xml", folder);
+        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-install.sh", folder);
+        moveToTempTestDirectory("test-project-reinstall-hooks", "hook-to-reinstall.sh", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         Verifier verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
@@ -96,7 +108,7 @@ public class InstallMojoTest extends AbstractMojoTest {
         List<String> origionalCommitMsgLines = verifier.loadFile(new File(rootFolder, ".git/hooks/commit-msg"), false);
         assertTrue(origionalCommitMsgLines.contains("origional hook"));
 
-        moveToTempTestDirectory("test-project-reinstall-hooks", "pom2.xml", "pom.xml");
+        moveToTempTestDirectory("test-project-reinstall-hooks", "pom2.xml", "pom.xml", folder);
         verifier = getVerifier(rootFolder.toString());
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
@@ -114,15 +126,19 @@ public class InstallMojoTest extends AbstractMojoTest {
      *
      * @throws IOException if a temp project cannot be created for testing.
      */
-    @Test(expected = MojoFailureException.class)
+    @Test
     public void testFailureFromInvalidHookNames() throws Exception {
-        moveToTempTestDirectory("test-project-invalid-hook", "pom.xml");
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("test-project-invalid-hook", "pom.xml", folder);
 
-        final File rootFolder = getFolder().getRoot();
+        final File rootFolder = folder.getRoot();
         assertTrue(rootFolder.exists());
         final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
         assertNotNull(installMojo);
-        installMojo.execute();
+
+        final Executable testMethod = () -> installMojo.execute();
+        final MojoFailureException thrown = assertThrows(MojoFailureException.class, testMethod);
+        assertThat(thrown.getMessage(), Is.is(IsEqual.equalTo("Could not find or initialise a local git repository. A repository is required.")));
     }
 
 }
