@@ -88,7 +88,7 @@ With both of the above goals, the build will fail if the project is not managed 
 
 ### Wait, but why?
 
-Many web-based hosting services for version control using Git, do not allow server side hooks. Server side hooks are extremely useful for enforcing certain styles of commit message, restricting the kind and types of actions that can be performed against certain branches, providing useful feedback or advice during certain actions in Git, and much more. This kinds of quick feedback is advantageous when managing any large group of developers. 
+Many web-based hosting services for version control using Git, do not allow server side hooks. Server side hooks are extremely useful for enforcing certain styles of commit message, restricting the kind and types of actions that can be performed against certain branches, providing useful feedback or advice during certain actions in Git, and much more. This kind of quick feedback is advantageous when managing any large group of developers. 
 
 If you cannot perform these kind of actions server side, what else can be done? Well, the hooks can be installed on the developers local machines. But it can be difficult to organise groups of people to install these hooks and even more difficult to get updates out to everyone. 
 
