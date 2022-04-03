@@ -10,7 +10,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
-/** Mojo for intializing a Git repository if one does not already exist. */
+/** Mojo for initializing a Git repository if one does not already exist. */
 @Mojo(name = "initialize", defaultPhase = LifecyclePhase.INITIALIZE, threadSafe = true)
 public class InitialiseMojo extends AbstractMojo {
 
