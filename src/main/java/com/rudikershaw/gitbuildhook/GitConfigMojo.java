@@ -15,7 +15,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import com.rudikershaw.gitbuildhook.validation.GitRepositoryValidator;
 
 /** Mojo for specifying a custom git config settings for your Git repository. */
-@Mojo(name = "configure", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+@Mojo(name = "configure", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
 public class GitConfigMojo extends GitRepositoryValidator {
 
     /** Injected MavenProject containing project related information such as base directory. */
