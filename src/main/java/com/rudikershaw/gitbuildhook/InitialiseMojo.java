@@ -11,7 +11,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 /** Mojo for intializing a Git repository if one does not already exist. */
-@Mojo(name = "initialize", defaultPhase = LifecyclePhase.INITIALIZE)
+@Mojo(name = "initialize", defaultPhase = LifecyclePhase.INITIALIZE, threadSafe = true)
 public class InitialiseMojo extends AbstractMojo {
 
     /** Injected MavenProject containing project related information such as base directory. */
@@ -20,13 +20,23 @@ public class InitialiseMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoFailureException {
-        final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
-        repoBuilder.findGitDir(project.getBasedir());
-        if (repoBuilder.getGitDir() == null) {
+        if (!isGitRepoInitialised()) {
             initialiseGitRepository();
+        } else {
+            getLog().info("A Git repository is already initialized.");
         }
     }
 
+    /**
+     * Returns true if there is already a valid git repository, otherwise false.
+     *
+     * @return whether a git repository is initialized.
+     */
+    private boolean isGitRepoInitialised() {
+        final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
+        repoBuilder.findGitDir(project.getBasedir());
+        return repoBuilder.getGitDir() != null;
+    }
     /**
      * Initialise a new git repository in the Maven project base directory.
      *
@@ -36,7 +46,11 @@ public class InitialiseMojo extends AbstractMojo {
         try {
             Git.init().setDirectory(project.getBasedir()).call();
         } catch (final GitAPIException e) {
-            throw new MojoFailureException("Could initialise a local git repository.", e);
+            if (!isGitRepoInitialised()) {
+                throw new MojoFailureException("Could not initialise a local git repository.", e);
+            } else {
+                getLog().warn("Tried to initialize a Git repository, but a repository already exists.");
+            }
         }
     }
 }
