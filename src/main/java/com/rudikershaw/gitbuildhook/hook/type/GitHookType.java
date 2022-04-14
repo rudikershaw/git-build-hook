@@ -33,7 +33,9 @@ public enum GitHookType {
     APPLYPATCH_MSG("applypatch-msg"),
 
     /** The pre apply patch hook. */
-    PRE_APPLYPATCH("pre-applypatch");
+    PRE_APPLYPATCH("pre-applypatch"),
+    
+    POST_MERGE("post-merge");
 
     /** The pre-specified name of the file of this hook type. */
     private final String hookFileName;
