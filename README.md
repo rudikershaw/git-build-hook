@@ -96,7 +96,7 @@ If only there was some way that the hooks could be managed in your project repos
 
 [licence-image]: http://img.shields.io/npm/l/gulp-rtlcss.svg?style=flat
 [licence-url]: https://tldrlegal.com/license/mit-license
-[travis-image]: https://travis-ci.com/rudikershaw/git-build-hook.svg?branch=master
-[travis-url]: https://travis-ci.com/rudikershaw/git-build-hook
+[travis-image]: https://app.travis-ci.com/rudikershaw/git-build-hook.svg?branch=develop
+[travis-url]: https://app.travis-ci.com/rudikershaw/git-build-hook?branch=develop
 [maven-central-image]: https://maven-badges.herokuapp.com/maven-central/com.rudikershaw.gitbuildhook/git-build-hook-maven-plugin/badge.svg
 [maven-central-url]: https://maven-badges.herokuapp.com/maven-central/com.rudikershaw.gitbuildhook/git-build-hook-maven-plugin
