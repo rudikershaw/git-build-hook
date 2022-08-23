@@ -35,8 +35,59 @@ public enum GitHookType {
     /** The pre apply patch hook. */
     PRE_APPLYPATCH("pre-applypatch"),
 
-    /** The pre apply patch hook. */
-    POST_MERGE("post-merge");
+    /** The post merge hook. */
+    POST_MERGE("post-merge"),
+
+    /** Post apply patch hook. */
+    POST_APPLYPATCH("post-applypatch"),
+
+    /** Post commit hook. */
+    POST_COMMIT("post-commit"),
+
+    /** Post checkout hook. */
+    POST_CHECKOUT("post-checkout"),
+
+    /** Pre receive hook. */
+    PRE_RECEIVE("pre-receive"),
+
+    /** Proc receive hook. */
+    PROC_RECEIVE("proc-receive"),
+
+    /** Post receive hook. */
+    POST_RECEIVE("post-receive"),
+
+    /** Reference transaction hook. */
+    REFERENCE_TRANSACTION("reference-transaction"),
+
+    /** Push to checkout hook. */
+    PUSH_TO_CHECKOUT("push-to-checkout"),
+
+    /** Pre auto gc hook. */
+    PRE_AUTO_GC("pre-auto-gc"),
+
+    /** Post rewrite hook. */
+    POST_REWRITE("post-rewrite"),
+
+    /** Send email validate hook. */
+    SENDEMAIL_VALIDATE("sendemail-validate"),
+
+    /** FS monitor watchman hook. */
+    FSMONITOR_WATCHMAN("fsmonitor-watchman"),
+
+    /** P4 changelist hook. */
+    P4_CHANGELIST("p4-changelist"),
+
+    /** P4 prepare changelist hook. */
+    P4_PREPARE_CHANGELIST("p4-prepare-changelist"),
+
+    /** P4 post changelist hook. */
+    P4_POST_CHANGELIST("p4-post-changelist"),
+
+    /** P4 pre submit hook. */
+    P4_PRE_SUBMIT("p4-pre-submit"),
+
+    /** Post index change hook. */
+    POST_INDEX_CHANGE("post-index-change");
 
     /** The pre-specified name of the file of this hook type. */
     private final String hookFileName;
