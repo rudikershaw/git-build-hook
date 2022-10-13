@@ -9,6 +9,7 @@ import org.apache.maven.it.Verifier;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
 public class GitConfigMojoTest extends AbstractMojoTest {
@@ -20,8 +21,9 @@ public class GitConfigMojoTest extends AbstractMojoTest {
      */
     @Test
     public void testConfigureGitHooksDirectory() throws Exception {
-        moveToTempTestDirectory("test-project-configure", "pom.xml");
-        final File rootFolder = getFolder().getRoot();
+        final TemporaryFolder folder = getFolder();
+        moveToTempTestDirectory("test-project-configure", "pom.xml", folder);
+        final File rootFolder = folder.getRoot();
         assertTrue(rootFolder.exists());
 
         final Verifier verifier = getVerifier(rootFolder.toString());
@@ -38,5 +40,5 @@ public class GitConfigMojoTest extends AbstractMojoTest {
             assertEquals("custom", git.getRepository().getConfig().getString("custom", "config", "name"));
         }
     }
-}
 
+}

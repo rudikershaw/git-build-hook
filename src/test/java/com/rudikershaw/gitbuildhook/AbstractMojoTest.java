@@ -48,8 +48,8 @@ public class AbstractMojoTest {
      * @param fileName the name of the file to move into the temporary directory.
      * @throws IOException if moving the file in question fails.
      */
-    protected void moveToTempTestDirectory(final String testName, final String fileName) throws IOException {
-        moveToTempTestDirectory(testName, fileName, fileName);
+    protected void moveToTempTestDirectory(final String testName, final String fileName, final TemporaryFolder folder) throws IOException {
+        moveToTempTestDirectory(testName, fileName, fileName, folder);
     }
 
     /**
@@ -59,7 +59,7 @@ public class AbstractMojoTest {
      * @param fileName the name of the file to move into the temporary directory.
      * @throws IOException if moving the file in question fails.
      */
-    protected void moveToTempTestDirectory(final String testName, final String fileName, final String newFileName) throws IOException {
+    protected void moveToTempTestDirectory(final String testName, final String fileName, final String newFileName, final TemporaryFolder folder) throws IOException {
         Files.copy(Paths.get("target/test-classes/" + testName + "/" + fileName),
                    Paths.get(folder.getRoot().getAbsolutePath() + "/" + newFileName),
                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
@@ -79,4 +79,5 @@ public class AbstractMojoTest {
         verifier.setLocalRepo(testRepsotiroyDirectory.getAbsolutePath());
         return verifier;
     }
+
 }
