@@ -1,7 +1,11 @@
 package com.rudikershaw.gitbuildhook;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +14,10 @@ import java.util.List;
 import org.apache.maven.it.Verifier;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 
 /** Unit and integration tests for the GitBuildHookMojo. */
+@SuppressWarnings("PMD.TooManyStaticImports")
 public class InstallMojoTest extends AbstractMojoTest {
 
     /**
@@ -35,7 +41,7 @@ public class InstallMojoTest extends AbstractMojoTest {
      *
      * @throws IOException if a temp project cannot be created for testing.
      */
-    @Test(expected = MojoFailureException.class)
+    @Test
     public void testFailureFromLackingGitRepo() throws Exception {
         moveToTempTestDirectory("default-test-project", "pom.xml");
 
@@ -43,7 +49,10 @@ public class InstallMojoTest extends AbstractMojoTest {
         assertTrue(rootFolder.exists());
         final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
         assertNotNull(installMojo);
-        installMojo.execute();
+
+        final Executable testMethod = () -> installMojo.execute();
+        final MojoFailureException thrown = assertThrows(MojoFailureException.class, testMethod);
+        assertThat(thrown.getMessage(), is(equalTo("Could not find or initialise a local git repository. A repository is required.")));
     }
 
     /**
@@ -114,7 +123,7 @@ public class InstallMojoTest extends AbstractMojoTest {
      *
      * @throws IOException if a temp project cannot be created for testing.
      */
-    @Test(expected = MojoFailureException.class)
+    @Test
     public void testFailureFromInvalidHookNames() throws Exception {
         moveToTempTestDirectory("test-project-invalid-hook", "pom.xml");
 
@@ -122,7 +131,10 @@ public class InstallMojoTest extends AbstractMojoTest {
         assertTrue(rootFolder.exists());
         final InstallMojo installMojo = (InstallMojo) getRule().lookupConfiguredMojo(rootFolder, "install");
         assertNotNull(installMojo);
-        installMojo.execute();
+
+        final Executable testMethod = () -> installMojo.execute();
+        final MojoFailureException thrown = assertThrows(MojoFailureException.class, testMethod);
+        assertThat(thrown.getMessage(), is(equalTo("Could not find or initialise a local git repository. A repository is required.")));
     }
 
 }
