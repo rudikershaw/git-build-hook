@@ -1,6 +1,13 @@
 package com.rudikershaw.gitbuildhook;
 
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.io.FileUtils;
+import org.apache.maven.it.VerificationException;
+import org.apache.maven.it.Verifier;
+import org.apache.maven.plugin.testing.MojoRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,11 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import org.apache.maven.it.VerificationException;
-import org.apache.maven.plugin.testing.MojoRule;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-import org.apache.maven.it.Verifier;
+import static org.junit.Assert.assertTrue;
 
 /** Abstract test for Mojos. */
 public class AbstractMojoTest {
@@ -39,6 +42,18 @@ public class AbstractMojoTest {
     @Rule
     public TemporaryFolder getFolder() {
         return folder;
+    }
+
+    @Before
+    public void setup() throws IOException {
+        FileUtils.copyDirectory(new File("./.mvn"), new File(folder.getRoot().getAbsolutePath() + "/.mvn"));
+        Files.copy(Paths.get("mvnw"), Paths.get(folder.getRoot().getAbsolutePath() + "/mvnw"));
+        Files.copy(Paths.get("mvnw.cmd"), Paths.get(folder.getRoot().getAbsolutePath() + "/mvnw.cmd"));
+    }
+
+    @After
+    public void teardown() throws IOException {
+        FileUtils.deleteDirectory(folder.getRoot());
     }
 
     /**
