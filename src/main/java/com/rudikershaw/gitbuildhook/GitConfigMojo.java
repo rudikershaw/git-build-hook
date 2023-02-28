@@ -23,7 +23,7 @@ public class GitConfigMojo extends GitRepositoryValidator {
     private MavenProject project;
 
     /** The git config to set and the values to set them to. */
-    @Parameter(readonly = true)
+    @Parameter
     private Map<String, String> gitConfig;
 
     @Override

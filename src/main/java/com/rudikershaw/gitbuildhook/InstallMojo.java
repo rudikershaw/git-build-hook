@@ -27,7 +27,7 @@ import com.rudikershaw.gitbuildhook.validation.GitRepositoryValidator;
 public class InstallMojo extends GitRepositoryValidator {
 
     /** The location of git hooks to install into the default hooks directory. */
-    @Parameter(readonly = true)
+    @Parameter
     private final Map<String, String> installHooks = new HashMap<>();
 
     /** Injected MavenProject containing project related information such as base directory. */
