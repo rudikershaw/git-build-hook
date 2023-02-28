@@ -26,6 +26,8 @@ A common use-case might be to install local git hooks by setting the `core.hooks
       <groupId>com.rudikershaw.gitbuildhook</groupId>
       <artifactId>git-build-hook-maven-plugin</artifactId>
       <version>3.3.0</version>
+      <!-- Cancel the propagation of plugins to submodules -->
+      <inherited>false</inherited>
       <configuration>
         <gitConfig>
           <!-- The location of the directory you are using to store the Git hooks in your project. -->
