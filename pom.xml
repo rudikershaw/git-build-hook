@@ -115,7 +115,8 @@
 
   <build>
     <plugins>
-      <!-- Override jar and install plugin for extra pre-test install to a custom repo for testing. -->
+      <!-- Problem: The integration tests run using Maven verifier API are testing projects run from the previous build. -->
+      <!-- Solution: Override jar and install plugin for extra pre-test install to a custom repo for testing. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -175,6 +176,25 @@
             <goals>
               <goal>install-file</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.rudikershaw</groupId>
+        <artifactId>remove-attached-artifact-maven-plugin</artifactId>
+        <version>1.1.0</version>
+        <executions>
+          <execution>
+            <id>remove-attached-artifacts</id>
+            <goals>
+              <goal>remove</goal>
+            </goals>
+            <configuration>
+              <artifactIds>
+                <artifactId>${project.groupId}:${project.artifactId}:jar:TEST:${project.version}</artifactId>
+                <artifactId>${project.groupId}:${project.artifactId}:test-jar:CPHOOKS:${project.version}</artifactId>
+              </artifactIds>
+            </configuration>
           </execution>
         </executions>
       </plugin>
