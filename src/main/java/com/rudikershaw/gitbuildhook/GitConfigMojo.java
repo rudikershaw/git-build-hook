@@ -34,6 +34,14 @@ public class GitConfigMojo extends GitRepositoryValidator {
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
         repoBuilder.findGitDir(project.getBasedir());
 
+        if (repoBuilder.getGitDir().getAbsolutePath().contains(".git/worktrees/")) {
+            getLog().warn(
+    "The plugin appears to be running in a Git worktree. "
+                + "Worktree configuration is not currently supported. No configuration changes made."
+            );
+            return;
+        }
+
         try (Git git = Git.open(repoBuilder.getGitDir())) {
             final StoredConfig config = git.getRepository().getConfig();
             for (final Map.Entry<String, String> entry : gitConfig.entrySet()) {

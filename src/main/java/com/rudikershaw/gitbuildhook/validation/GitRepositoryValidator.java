@@ -1,11 +1,8 @@
 package com.rudikershaw.gitbuildhook.validation;
 
-import java.io.IOException;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 /** Abstract class containing the logic required to fail a goal if there is no valid git repository. */
@@ -21,13 +18,7 @@ public abstract class GitRepositoryValidator extends AbstractMojo {
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
         repoBuilder.findGitDir(project.getBasedir());
 
-        if (repoBuilder.getGitDir() != null) {
-            try (Git git = Git.open(repoBuilder.getGitDir())) {
-                getLog().info("Found the local git repository.");
-            } catch (final IOException e) {
-                failBuildBecauseRepoCouldNotBeFound(e);
-            }
-        } else {
+        if (repoBuilder.getGitDir() == null) {
             failBuildBecauseRepoCouldNotBeFound(null);
         }
     }
