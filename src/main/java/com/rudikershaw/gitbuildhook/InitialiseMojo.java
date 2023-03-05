@@ -1,5 +1,6 @@
 package com.rudikershaw.gitbuildhook;
 
+import com.rudikershaw.gitbuildhook.threadsafety.ClassLock;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -44,7 +45,9 @@ public class InitialiseMojo extends AbstractMojo {
      */
     private void initialiseGitRepository() throws MojoFailureException {
         try {
-            Git.init().setDirectory(project.getBasedir()).call();
+            synchronized (ClassLock.class) {
+                Git.init().setDirectory(project.getBasedir()).call();
+            }
         } catch (final GitAPIException e) {
             if (!isGitRepoInitialised()) {
                 throw new MojoFailureException("Could not initialise a local git repository.", e);

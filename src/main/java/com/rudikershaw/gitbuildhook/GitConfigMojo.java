@@ -3,6 +3,7 @@ package com.rudikershaw.gitbuildhook;
 import java.io.IOException;
 import java.util.Map;
 
+import com.rudikershaw.gitbuildhook.threadsafety.ClassLock;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -37,21 +38,23 @@ public class GitConfigMojo extends GitRepositoryValidator {
         if (repoBuilder.getGitDir().getAbsolutePath().contains(".git/worktrees/")) {
             getLog().warn(
     "The plugin appears to be running in a Git worktree. "
-                + "Worktree configuration is not currently supported. No configuration changes made."
+                + "No configuration changes made."
             );
             return;
         }
 
-        try (Git git = Git.open(repoBuilder.getGitDir())) {
-            final StoredConfig config = git.getRepository().getConfig();
-            for (final Map.Entry<String, String> entry : gitConfig.entrySet()) {
-                final String[] conf = stringToConfigArray(entry.getKey());
-                config.setString(conf[0], conf[1], conf[2], entry.getValue());
-                getLog().info("Git config '" + entry.getKey() + "' set to - " + entry.getValue());
+        synchronized (ClassLock.class) {
+            try (Git git = Git.open(repoBuilder.getGitDir())) {
+                final StoredConfig config = git.getRepository().getConfig();
+                for (final Map.Entry<String, String> entry : gitConfig.entrySet()) {
+                    final String[] conf = stringToConfigArray(entry.getKey());
+                    config.setString(conf[0], conf[1], conf[2], entry.getValue());
+                    getLog().info("Git config '" + entry.getKey() + "' set to - " + entry.getValue());
+                }
+                config.save();
+            } catch (final IOException ioe) {
+                failBuildBecauseRepoCouldNotBeFound(ioe);
             }
-            config.save();
-        } catch (final IOException ioe) {
-            failBuildBecauseRepoCouldNotBeFound(ioe);
         }
     }
 

@@ -72,7 +72,7 @@ public class InstallMojo extends GitRepositoryValidator {
     }
 
     /**
-     * Copies the specified file from the file system into the the default hooks directory.
+     * Copies the specified file from the file system into the default hooks directory.
      *
      * @param filePath path to the file to use as the hook.
      * @param gitHookPathStr the location to move the file to.
