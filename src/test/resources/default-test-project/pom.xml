@@ -15,7 +15,7 @@
       <plugin>
         <groupId>com.rudikershaw.gitbuildhook</groupId>
         <artifactId>git-build-hook-maven-plugin</artifactId>
-        <version>3.4.1</version>
+        <version>3.5.0-SNAPSHOT</version>
       </plugin>
     </plugins>
   </build>
