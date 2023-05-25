@@ -44,6 +44,9 @@ public class GitConfigMojo extends GitRepositoryValidator {
         }
 
         synchronized (ClassLock.class) {
+            if (gitConfig == null) {
+                return;
+            }
             try (Git git = Git.open(repoBuilder.getGitDir())) {
                 final StoredConfig config = git.getRepository().getConfig();
                 for (final Map.Entry<String, String> entry : gitConfig.entrySet()) {
