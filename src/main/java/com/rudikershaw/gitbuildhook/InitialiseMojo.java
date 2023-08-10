@@ -19,8 +19,17 @@ public class InitialiseMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
+    /** Skip initialising the git repo. */
+    @Parameter(property = "gitbuildhook.init.skip", defaultValue = "false")
+    private boolean skip;
+
     @Override
     public void execute() throws MojoFailureException {
+        if (skip) {
+            getLog().debug("Skipping");
+            return;
+        }
+
         if (!isGitRepoInitialised()) {
             initialiseGitRepository();
         } else {

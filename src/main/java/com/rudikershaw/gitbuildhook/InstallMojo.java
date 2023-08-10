@@ -34,8 +34,17 @@ public class InstallMojo extends GitRepositoryValidator {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
+    /** Skip installing hooks. */
+    @Parameter(property = "gitbuildhook.install.skip", defaultValue = "false")
+    private boolean skip;
+
     @Override
     public void execute() throws MojoFailureException {
+        if (skip) {
+            getLog().debug("Skipping");
+            return;
+        }
+
         // This goal requires the project to have a git repository initialized.
         validateGitRepository(project);
 

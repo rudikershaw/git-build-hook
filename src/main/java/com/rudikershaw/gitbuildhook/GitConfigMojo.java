@@ -27,8 +27,17 @@ public class GitConfigMojo extends GitRepositoryValidator {
     @Parameter
     private Map<String, String> gitConfig;
 
+    /** Skip specifying custom git config settings. */
+    @Parameter(property = "gitbuildhook.gitconfig.skip", defaultValue = "false")
+    private boolean skip;
+
     @Override
     public void execute() throws MojoFailureException {
+        if (skip) {
+            getLog().debug("Skipping");
+            return;
+        }
+
         // This goal requires the project to have a git repository initialized.
         validateGitRepository(project);
 
