@@ -1,5 +1,6 @@
 package com.rudikershaw.gitbuildhook;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -44,7 +45,8 @@ public class GitConfigMojo extends GitRepositoryValidator {
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
         repoBuilder.findGitDir(project.getBasedir());
 
-        if (repoBuilder.getGitDir().getAbsolutePath().contains(".git/worktrees/")) {
+        final String worktreePath = ".git" + File.separator + "worktrees" + File.separator;
+        if (repoBuilder.getGitDir().getAbsolutePath().contains(worktreePath)) {
             getLog().warn(
     "The plugin appears to be running in a Git worktree. "
                 + "No configuration changes made."
