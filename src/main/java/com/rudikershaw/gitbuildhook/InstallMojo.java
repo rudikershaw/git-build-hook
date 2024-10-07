@@ -48,6 +48,7 @@ public class InstallMojo extends AbstractMojo implements GitRepositoryValidator 
 
         // This goal requires the project to have a git repository initialized.
         validateGitRepository(project);
+        createGitHooksDirectory();
 
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
         repoBuilder.findGitDir(project.getBasedir());
@@ -60,6 +61,23 @@ public class InstallMojo extends AbstractMojo implements GitRepositoryValidator 
             } else {
                 throw new MojoFailureException("'" + hookName + "' is not a valid hook file name.");
             }
+        }
+    }
+
+    /**
+     * Create .git/hooks directory if one does not already exist.
+     *
+     * @throws MojoFailureException if the hooks directory could not be created.
+     */
+    private void createGitHooksDirectory() throws MojoFailureException {
+        final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
+        repoBuilder.findGitDir(project.getBasedir());
+        final String hooksDirPath = repoBuilder.getGitDir().toString()
+            + File.separator
+            + "hooks";
+        final File hooksDirFile = new File(hooksDirPath);
+        if (!hooksDirFile.exists() && !hooksDirFile.mkdirs()) {
+            throw new MojoFailureException("Could not create .git/hooks directory.");
         }
     }
 
