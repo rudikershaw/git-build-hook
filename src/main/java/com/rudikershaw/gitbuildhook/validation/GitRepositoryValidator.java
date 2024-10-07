@@ -1,12 +1,11 @@
 package com.rudikershaw.gitbuildhook.validation;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
-/** Abstract class containing the logic required to fail a goal if there is no valid git repository. */
-public abstract class GitRepositoryValidator extends AbstractMojo {
+/** Interface containing the logic required to fail a goal if there is no valid git repository. */
+public interface GitRepositoryValidator {
 
     /**
      * Check that a project has a git repository initialized.
@@ -14,13 +13,22 @@ public abstract class GitRepositoryValidator extends AbstractMojo {
      * @param project the Maven project to check.
      * @throws MojoFailureException if no git repository could be found.
      */
-    protected void validateGitRepository(final MavenProject project) throws MojoFailureException {
-        final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
-        repoBuilder.findGitDir(project.getBasedir());
-
-        if (repoBuilder.getGitDir() == null) {
+    default void validateGitRepository(final MavenProject project) throws MojoFailureException {
+        if (!isGitRepoInitialised(project)) {
             failBuildBecauseRepoCouldNotBeFound(null);
         }
+    }
+
+    /**
+     * Returns true if there is already a valid git repository, otherwise false.
+     *
+     * @param project the Maven project to check.
+     * @return whether a git repository is initialized.
+     */
+    default boolean isGitRepoInitialised(MavenProject project) {
+        final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
+        repoBuilder.findGitDir(project.getBasedir());
+        return repoBuilder.getGitDir() != null;
     }
 
     /**
@@ -30,7 +38,7 @@ public abstract class GitRepositoryValidator extends AbstractMojo {
      * @param e an exception that caused the build to fail.
      * @throws MojoFailureException to fail the build and with details of the failure.
      */
-    protected void failBuildBecauseRepoCouldNotBeFound(final Exception e) throws MojoFailureException {
+    default void failBuildBecauseRepoCouldNotBeFound(final Exception e) throws MojoFailureException {
         final String message = "Could not find or initialise a local git repository. A repository is required.";
         throw new MojoFailureException(message, e);
     }

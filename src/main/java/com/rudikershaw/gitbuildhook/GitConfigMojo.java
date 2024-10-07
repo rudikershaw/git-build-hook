@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.rudikershaw.gitbuildhook.threadsafety.ClassLock;
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -18,7 +19,7 @@ import com.rudikershaw.gitbuildhook.validation.GitRepositoryValidator;
 
 /** Mojo for specifying a custom git config settings for your Git repository. */
 @Mojo(name = "configure", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true)
-public class GitConfigMojo extends GitRepositoryValidator {
+public class GitConfigMojo extends AbstractMojo implements GitRepositoryValidator {
 
     /** Injected MavenProject containing project related information such as base directory. */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -24,7 +25,7 @@ import com.rudikershaw.gitbuildhook.validation.GitRepositoryValidator;
 
 /** Mojo for installing Git hooks. */
 @Mojo(name = "install", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
-public class InstallMojo extends GitRepositoryValidator {
+public class InstallMojo extends AbstractMojo implements GitRepositoryValidator {
 
     /** The location of git hooks to install into the default hooks directory. */
     @Parameter
