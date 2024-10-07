@@ -51,7 +51,7 @@ public class InstallMojo extends AbstractMojo implements GitRepositoryValidator 
 
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
         repoBuilder.findGitDir(project.getBasedir());
-        final String hooksDirectory = repoBuilder.getGitDir().toString() + "/hooks";
+        final String hooksDirectory = repoBuilder.getGitDir().toString() + File.separator + "hooks";
 
         for (final Map.Entry<String, String> hook : installHooks.entrySet()) {
             final String hookName = hook.getKey();

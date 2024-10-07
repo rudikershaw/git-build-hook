@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.it.Verifier;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Test;
@@ -59,6 +60,40 @@ public class InstallMojoTest extends AbstractMojoTest {
         final File rootFolder = getFolder().getRoot();
         assertTrue(rootFolder.exists());
         final Verifier verifier = getVerifier(rootFolder.toString());
+        verifier.executeGoal("install");
+        verifier.verifyErrorFreeLog();
+        verifier.assertFilePresent(".git/hooks/pre-commit");
+        verifier.assertFilePresent(".git/hooks/pre-push");
+        verifier.assertFilePresent(".git/hooks/pre-rebase");
+        verifier.assertFilePresent(".git/hooks/commit-msg");
+        verifier.assertFilePresent(".git/hooks/prepare-commit-msg");
+        verifier.assertFilePresent(".git/hooks/update");
+        verifier.assertFilePresent(".git/hooks/post-update");
+        verifier.assertFilePresent(".git/hooks/applypatch-msg");
+        verifier.assertFilePresent(".git/hooks/pre-applypatch");
+        verifier.resetStreams();
+    }
+
+    @Test
+    public void testMissingHooksDirectory() throws Exception {
+        moveToTempTestDirectory("test-project-install-hooks", "pom.xml");
+        moveToTempTestDirectory("test-project-install-hooks", "hook-to-install.sh");
+
+        final File rootFolder = getFolder().getRoot();
+        assertTrue(rootFolder.exists());
+        final Verifier verifier = getVerifier(rootFolder.toString());
+        verifier.executeGoal("install");
+        verifier.verifyErrorFreeLog();
+        verifier.resetStreams();
+        verifier.assertFilePresent(".git/hooks");
+
+        final File hooksFolder = rootFolder.toPath()
+            .resolve(".git")
+            .resolve("hooks")
+            .toFile();
+        FileUtils.deleteDirectory(hooksFolder);
+        verifier.assertFileNotPresent(".git/hooks");
+
         verifier.executeGoal("install");
         verifier.verifyErrorFreeLog();
         verifier.assertFilePresent(".git/hooks/pre-commit");

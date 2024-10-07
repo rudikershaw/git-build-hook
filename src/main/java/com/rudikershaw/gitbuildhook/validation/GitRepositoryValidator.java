@@ -1,5 +1,6 @@
 package com.rudikershaw.gitbuildhook.validation;
 
+import java.io.File;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -16,6 +17,25 @@ public interface GitRepositoryValidator {
     default void validateGitRepository(final MavenProject project) throws MojoFailureException {
         if (!isGitRepoInitialised(project)) {
             failBuildBecauseRepoCouldNotBeFound(null);
+        }
+        createGitHooksDirectory(project);
+    }
+
+    /**
+     * Create .git/hooks directory if one does not already exist.
+     *
+     * @param project the Maven project to check.
+     * @throws MojoFailureException if the hooks directory could not be created.
+     */
+    default void createGitHooksDirectory(final MavenProject project) throws MojoFailureException {
+        final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
+        repoBuilder.findGitDir(project.getBasedir());
+        final String hooksDirectory = repoBuilder.getGitDir().toString()
+            + File.separator
+            + "hooks";
+        final File hooksDirFile = new File(hooksDirectory);
+        if (!hooksDirFile.exists() && !hooksDirFile.mkdirs()) {
+            throw new MojoFailureException("Could not create .git/hooks directory.");
         }
     }
 
