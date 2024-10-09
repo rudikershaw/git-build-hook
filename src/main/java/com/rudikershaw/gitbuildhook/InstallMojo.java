@@ -48,7 +48,7 @@ public class InstallMojo extends AbstractMojo implements GitRepositoryValidator 
 
         // This goal requires the project to have a git repository initialized.
         validateGitRepository(project);
-        createGitHooksDirectory();
+        ensureGitHooksDirectoryExists();
 
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
         repoBuilder.findGitDir(project.getBasedir());
@@ -69,7 +69,7 @@ public class InstallMojo extends AbstractMojo implements GitRepositoryValidator 
      *
      * @throws MojoFailureException if the hooks directory could not be created.
      */
-    private void createGitHooksDirectory() throws MojoFailureException {
+    private void ensureGitHooksDirectoryExists() throws MojoFailureException {
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
         repoBuilder.findGitDir(project.getBasedir());
         final String hooksDirPath = repoBuilder.getGitDir().toString()
