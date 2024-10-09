@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -24,7 +25,7 @@ import com.rudikershaw.gitbuildhook.validation.GitRepositoryValidator;
 
 /** Mojo for installing Git hooks. */
 @Mojo(name = "install", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
-public class InstallMojo extends GitRepositoryValidator {
+public class InstallMojo extends AbstractMojo implements GitRepositoryValidator {
 
     /** The location of git hooks to install into the default hooks directory. */
     @Parameter
@@ -47,10 +48,11 @@ public class InstallMojo extends GitRepositoryValidator {
 
         // This goal requires the project to have a git repository initialized.
         validateGitRepository(project);
+        ensureGitHooksDirectoryExists();
 
         final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
         repoBuilder.findGitDir(project.getBasedir());
-        final String hooksDirectory = repoBuilder.getGitDir().toString() + "/hooks";
+        final String hooksDirectory = repoBuilder.getGitDir().toString() + File.separator + "hooks";
 
         for (final Map.Entry<String, String> hook : installHooks.entrySet()) {
             final String hookName = hook.getKey();
@@ -59,6 +61,23 @@ public class InstallMojo extends GitRepositoryValidator {
             } else {
                 throw new MojoFailureException("'" + hookName + "' is not a valid hook file name.");
             }
+        }
+    }
+
+    /**
+     * Create .git/hooks directory if one does not already exist.
+     *
+     * @throws MojoFailureException if the hooks directory could not be created.
+     */
+    private void ensureGitHooksDirectoryExists() throws MojoFailureException {
+        final FileRepositoryBuilder repoBuilder =  new FileRepositoryBuilder();
+        repoBuilder.findGitDir(project.getBasedir());
+        final String hooksDirPath = repoBuilder.getGitDir().toString()
+            + File.separator
+            + "hooks";
+        final File hooksDirFile = new File(hooksDirPath);
+        if (!hooksDirFile.exists() && !hooksDirFile.mkdirs()) {
+            throw new MojoFailureException("Could not create .git/hooks directory.");
         }
     }
 
