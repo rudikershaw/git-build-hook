@@ -19,7 +19,7 @@ A Maven plugin used to add configuration, install git hooks, and initialize the 
 
 A common use-case might be to install local git hooks by setting the `core.hooksPath` configuration. Put all your Git hooks in a directory in your project, then configure your `pom.xml` to include the following plugin declaration, goal, and configuration.
 
-```$xml
+```xml
 <build>
   <plugins>
     <plugin>
@@ -50,7 +50,7 @@ A common use-case might be to install local git hooks by setting the `core.hooks
 
 When you run your project build the plugin will configure git to run hooks out of the directory specified. This will effectively set up the hooks in that directory for everyone working on your project. If you would prefer to install individual git hooks into the default hooks directory, then you can use the `install` goal with configuration for each hook you wish to install like so;
 
-```$xml
+```xml
 ...
       <configuration>
         <installHooks>
@@ -76,7 +76,7 @@ When you run your project build the plugin will configure git to run hooks out o
 
 With both of the above goals, the build will fail if the project is not managed by Git. If you would prefer the plugin to, instead of failing, initialize a new Git repository at the root of the project you can do the following;
 
-```$xml
+```xml
 ...
 <goals>       
   <!-- Initialize a Git repository at the root of the project if one does not exist. -->
