@@ -43,7 +43,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <maven.version>3.9.0</maven.version>
+    <maven.version>3.9.10</maven.version>
   </properties>
 
   <dependencies>
@@ -84,8 +84,8 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
-      <version>2.2.1</version>
+      <artifactId>maven-core</artifactId>
+      <version>${maven.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
