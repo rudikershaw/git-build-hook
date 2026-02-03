@@ -2,7 +2,6 @@
 
 [![MIT Licence][licence-image]][licence-url]
 [![Build Status][travis-image]][travis-url]
-[![Maven Central][maven-central-image]][maven-central-url]
 
 # Git Build Hook Maven Plugin 
 
@@ -98,5 +97,3 @@ If only there was some way that the hooks could be managed in your project repos
 [licence-url]: https://tldrlegal.com/license/mit-license
 [travis-image]: https://app.travis-ci.com/rudikershaw/git-build-hook.svg?branch=develop
 [travis-url]: https://app.travis-ci.com/rudikershaw/git-build-hook?branch=develop
-[maven-central-image]: https://maven-badges.herokuapp.com/maven-central/com.rudikershaw.gitbuildhook/git-build-hook-maven-plugin/badge.svg
-[maven-central-url]: https://maven-badges.herokuapp.com/maven-central/com.rudikershaw.gitbuildhook/git-build-hook-maven-plugin
